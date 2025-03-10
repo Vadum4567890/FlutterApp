@@ -1,4 +1,4 @@
-// ignore_for_file: prefer_const_constructors
+// ignore_for_file: prefer_const_constructors, lines_longer_than_80_chars
 // This comment ignores the warning about preferring const constructors.
 
 import 'dart:io';

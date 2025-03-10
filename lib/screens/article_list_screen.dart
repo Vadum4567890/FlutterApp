@@ -1,4 +1,4 @@
-// ignore_for_file: library_private_types_in_public_api
+// ignore_for_file: library_private_types_in_public_api, lines_longer_than_80_chars
 // This comment ignores the warning about using private types in public API.
 
 import 'dart:io';
