@@ -1,3 +1,5 @@
+// ignore_for_file: library_private_types_in_public_api, use_build_context_synchronously
+
 import 'package:flutter/material.dart';
 import 'package:my_project/services/auth_service.dart';
 
@@ -13,8 +15,8 @@ class _LoginScreenState extends State<LoginScreen> {
   final TextEditingController _passwordController = TextEditingController();
   String _errorMessage = '';
 
-  void _handleLogin() {
-    if (AuthService.login(_usernameController.text, _passwordController.text)) {
+  Future<void> _handleLogin() async {
+    if (await AuthService.login(_usernameController.text, _passwordController.text)) {
       Navigator.pushNamed(context, '/home');
     } else {
       setState(() => _errorMessage = 'Invalid username or password');

@@ -27,13 +27,26 @@ class ProfileScreen extends StatelessWidget {
                   child: Icon(Icons.person, size: 50, color: Colors.blueAccent),
                 ),
                 const SizedBox(height: 20),
-                Text(
-                  'Welcome, ${AuthService.currentUser ?? "Guest"}',
-                  style: const TextStyle(
-                    fontSize: 24,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.white,
-                  ),
+                // Use FutureBuilder to handle the async call
+                FutureBuilder<String?>(
+                  future: AuthService.currentUser, // Get the current user asynchronously
+                  builder: (context, snapshot) {
+                    if (snapshot.connectionState == ConnectionState.waiting) {
+                      return const CircularProgressIndicator();
+                    }
+                    if (snapshot.hasError) {
+                      return Text('Error: ${snapshot.error}');
+                    }
+                    final String user = snapshot.data ?? 'Guest';
+                    return Text(
+                      'Welcome, $user',
+                      style: const TextStyle(
+                        fontSize: 24,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.white,
+                      ),
+                    );
+                  },
                 ),
                 const SizedBox(height: 20),
                 GestureDetector(

@@ -1,4 +1,5 @@
-// ignore_for_file: library_private_types_in_public_api, lines_longer_than_80_chars, inference_failure_on_instance_creation
+// ignore_for_file: library_private_types_in_public_api, lines_longer_than_80_chars
+// ignore_for_file: inference_failure_on_instance_creation
 // This comment ignores the warning about using private types in public API.
 
 import 'dart:io';
@@ -18,30 +19,36 @@ class ArticleListScreen extends StatefulWidget {
 class _ArticleListScreenState extends State<ArticleListScreen> {
   List<Article> articles = [];
 
-  // Method to add a new article
- void _addArticle(String title, String content, String? imagePath) {
-  setState(() {
-    articles.add(Article(
-      title: title,
-      content: content,
-      imagePath: imagePath,
-      author: AuthService.currentUser ?? 'Unknown User', // Додаємо автора
-    ),);
-  });
-}
+  void _addArticle(String title, String content, String? imagePath) async {
+    final author = await AuthService.currentUser ?? 'Unknown User';
 
-
-  // Method to delete an article
-  void _deleteArticle(int index) {
     setState(() {
-      articles.removeAt(index);
+      articles.add(Article(
+        title: title,
+        content: content,
+        imagePath: imagePath,
+        author: author,
+      ),);
     });
   }
 
-  // Method to edit an article
-  void _editArticle(int index, String title, String content, String? imagePath) {
+  void _editArticle(int index, String title, String content, String? imagePath) async {
+    final author = await AuthService.currentUser ?? 'Unknown User';
+
     setState(() {
-      articles[index] = Article(title: title, content: content, imagePath: imagePath, author: AuthService.currentUser ?? 'Unknown User',);
+      articles[index] = Article(
+        title: title,
+        content: content,
+        imagePath: imagePath,
+        author: author,
+      );
+    });
+  }
+
+
+  void _deleteArticle(int index) {
+    setState(() {
+      articles.removeAt(index);
     });
   }
 
@@ -49,7 +56,7 @@ class _ArticleListScreenState extends State<ArticleListScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        automaticallyImplyLeading: false, // Прибирає кнопку "Назад"
+        automaticallyImplyLeading: false,
         title: Text('Articles'),
         actions: [
           IconButton(

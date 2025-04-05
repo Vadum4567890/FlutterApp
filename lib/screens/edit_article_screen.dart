@@ -24,7 +24,6 @@ class _EditArticleDialogState extends State<EditArticleDialog> {
   @override
   void initState() {
     super.initState();
-    // Initialize the text editing controllers with the article's data
     _titleController = TextEditingController(text: widget.article.title);
     _contentController = TextEditingController(text: widget.article.content);
     _imagePath = widget.article.imagePath;
@@ -32,7 +31,6 @@ class _EditArticleDialogState extends State<EditArticleDialog> {
 
   @override
   void dispose() {
-    // Dispose the text editing controllers to avoid memory leaks
     _titleController.dispose();
     _contentController.dispose();
     super.dispose();
@@ -45,7 +43,6 @@ class _EditArticleDialogState extends State<EditArticleDialog> {
       content: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          // Text field for editing the article title
           TextField(
             controller: _titleController,
             decoration: InputDecoration(
@@ -53,7 +50,6 @@ class _EditArticleDialogState extends State<EditArticleDialog> {
             ),
           ),
           SizedBox(height: 16.0),
-          // Text field for editing the article content
           TextField(
             controller: _contentController,
             maxLines: 3,
@@ -62,7 +58,6 @@ class _EditArticleDialogState extends State<EditArticleDialog> {
             ),
           ),
           SizedBox(height: 16.0),
-          // Display the article's image if it exists
           if (_imagePath != null)
             Image.file(
               File(_imagePath!),
@@ -73,17 +68,14 @@ class _EditArticleDialogState extends State<EditArticleDialog> {
         ],
       ),
       actions: [
-        // Cancel button
         TextButton(
           onPressed: () {
             Navigator.of(context).pop();
           },
           child: Text('Cancel'),
         ),
-        // Save button
         TextButton(
           onPressed: () {
-            // Call the onEdit callback with the updated article data
             widget.onEdit(
               _titleController.text,
               _contentController.text,

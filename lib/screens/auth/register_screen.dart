@@ -1,4 +1,4 @@
-// ignore_for_file: use_decorated_box, library_private_types_in_public_api
+// ignore_for_file: use_decorated_box, library_private_types_in_public_api, use_build_context_synchronously
 
 import 'package:flutter/material.dart';
 import 'package:my_project/services/auth_service.dart';
@@ -16,13 +16,13 @@ class _RegisterScreenState extends State<RegisterScreen> {
   final TextEditingController _confirmPasswordController = TextEditingController();
   String _errorMessage = '';
 
-  void _handleRegister() {
+  Future<void> _handleRegister() async {
     if (_passwordController.text != _confirmPasswordController.text) {
       setState(() => _errorMessage = 'Passwords do not match');
       return;
     }
     
-    if (AuthService.register(_usernameController.text, _passwordController.text)) {
+    if (await AuthService.register(_usernameController.text, _passwordController.text)) {
       Navigator.pushNamed(context, '/login');
     } else {
       setState(() => _errorMessage = 'Username already exists');

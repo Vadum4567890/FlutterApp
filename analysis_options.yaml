@@ -28,7 +28,6 @@ linter:
     - directives_ordering
     - eol_at_end_of_file
     - file_names
-    - lines_longer_than_80_chars
     - matching_super_parameters
     - prefer_const_declarations
     - prefer_const_constructors

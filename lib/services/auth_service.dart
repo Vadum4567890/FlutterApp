@@ -1,24 +1,38 @@
+import 'package:shared_preferences/shared_preferences.dart';
+
 class AuthService {
-  static final Map<String, String> _users = {};
+  static const _usernameKey = 'username';
   static String? _currentUser;
 
-  static bool register(String username, String password) {
-    if (_users.containsKey(username)) return false;
-    _users[username] = password;
+  static Future<bool> register(String username, String password) async {
+    final prefs = await SharedPreferences.getInstance();
+    if (prefs.getString(username) != null) return false;
+    await prefs.setString(username, password);
     return true;
   }
 
-  static bool login(String username, String password) {
-    if (_users[username] == password) {
+  static Future<bool> login(String username, String password) async {
+    final prefs = await SharedPreferences.getInstance();
+    final String? storedPassword = prefs.getString(username);
+    if (storedPassword != null && storedPassword == password) {
       _currentUser = username;
+      await prefs.setString(_usernameKey, username);
       return true;
     }
     return false;
   }
 
-  static void logout() {
+  static Future<void> logout() async {
+    final prefs = await SharedPreferences.getInstance();
     _currentUser = null;
+    await prefs.remove(_usernameKey);
   }
 
-  static String? get currentUser => _currentUser;
+  static Future<String?> get currentUser async {
+    if (_currentUser == null) {
+      final prefs = await SharedPreferences.getInstance();
+      _currentUser = prefs.getString(_usernameKey);
+    }
+    return _currentUser;
+  }
 }
