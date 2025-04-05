@@ -1,5 +1,4 @@
 // ignore_for_file: prefer_const_constructors, lines_longer_than_80_chars
-// This comment ignores the warning about preferring const constructors.
 
 import 'dart:io';
 import 'package:flutter/material.dart';
@@ -18,7 +17,7 @@ class ArticleDetailScreen extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // Display the article image if it exists, otherwise show a placeholder icon
+            // Відображення зображення статті або іконки-заповнювача
             if (article.imagePath != null)
               Center(
                 child: Image.file(
@@ -32,8 +31,29 @@ class ArticleDetailScreen extends StatelessWidget {
                 child: Icon(Icons.image_not_supported, size: 200),
               ),
             SizedBox(height: 20),
-            // Display the article content
-            Text(article.content, style: TextStyle(fontSize: 16)),
+
+            // Блок інформації про автора та зміст статті
+            Container(
+              padding: EdgeInsets.all(12),
+              decoration: BoxDecoration(
+                color: Colors.grey[200],
+                borderRadius: BorderRadius.circular(8),
+              ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    'Author: ${article.author}',
+                    style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold, color: Colors.black87),
+                  ),
+                  SizedBox(height: 10),
+                  Text(
+                    article.content,
+                    style: TextStyle(fontSize: 16, color: Colors.black87),
+                  ),
+                ],
+              ),
+            ),
           ],
         ),
       ),
