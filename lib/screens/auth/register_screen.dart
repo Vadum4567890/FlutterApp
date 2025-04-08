@@ -1,10 +1,12 @@
-// ignore_for_file: use_decorated_box, library_private_types_in_public_api, use_build_context_synchronously
+// ignore_for_file: library_private_types_in_public_api, use_build_context_synchronously, use_decorated_box
 
 import 'package:flutter/material.dart';
-import 'package:my_project/services/auth_service.dart';
+import 'package:my_project/domain/services/auth_service.dart';
 
 class RegisterScreen extends StatefulWidget {
-  const RegisterScreen({super.key});
+  final AuthService authService;
+
+  const RegisterScreen({required this.authService, super.key});
 
   @override
   _RegisterScreenState createState() => _RegisterScreenState();
@@ -12,17 +14,54 @@ class RegisterScreen extends StatefulWidget {
 
 class _RegisterScreenState extends State<RegisterScreen> {
   final TextEditingController _usernameController = TextEditingController();
+  final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
   final TextEditingController _confirmPasswordController = TextEditingController();
   String _errorMessage = '';
 
+  bool _isValidEmail(String email) {
+    final emailRegex = RegExp(r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$');
+    return emailRegex.hasMatch(email);
+  }
+
+  bool _isValidUsername(String username) {
+    final usernameRegex = RegExp(r'^[a-zA-Z0-9]{4,}$');
+    return usernameRegex.hasMatch(username);
+  }
+
+  bool _isValidPassword(String password) {
+    return password.length >= 6;
+  }
+
   Future<void> _handleRegister() async {
-    if (_passwordController.text != _confirmPasswordController.text) {
+    final username = _usernameController.text.trim();
+    final email = _emailController.text.trim();
+    final password = _passwordController.text;
+    final confirmPassword = _confirmPasswordController.text;
+
+    if (!_isValidEmail(email)) {
+      setState(() => _errorMessage = 'Invalid email address');
+      return;
+    }
+
+    if (!_isValidUsername(username)) {
+      setState(() => _errorMessage = 'Username must be at least 4 characters and contain no special characters');
+      return;
+    }
+
+    if (!_isValidPassword(password)) {
+      setState(() => _errorMessage = 'Password must be at least 6 characters');
+      return;
+    }
+
+    if (password != confirmPassword) {
       setState(() => _errorMessage = 'Passwords do not match');
       return;
     }
-    
-    if (await AuthService.register(_usernameController.text, _passwordController.text)) {
+
+    final success = await widget.authService.register(username, password, email);
+
+    if (success) {
       Navigator.pushNamed(context, '/login');
     } else {
       setState(() => _errorMessage = 'Username already exists');
@@ -59,6 +98,18 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   controller: _usernameController,
                   decoration: InputDecoration(
                     labelText: 'Username',
+                    filled: true,
+                    fillColor: Colors.white.withOpacity(0.8),
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 10),
+                TextField(
+                  controller: _emailController,
+                  decoration: InputDecoration(
+                    labelText: 'Email',
                     filled: true,
                     fillColor: Colors.white.withOpacity(0.8),
                     border: OutlineInputBorder(
