@@ -1,5 +1,3 @@
-// ignore_for_file: always_put_required_named_parameters_first
-
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
@@ -7,7 +5,7 @@ import 'package:image_picker/image_picker.dart';
 class AddArticleScreen extends StatefulWidget {
   final void Function(String, String, String?) onAdd;
 
-  const AddArticleScreen({super.key, required this.onAdd});
+  const AddArticleScreen({required this.onAdd, super.key});
 
   @override
   State<AddArticleScreen> createState() => _AddArticleScreenState();
@@ -45,36 +43,107 @@ class _AddArticleScreenState extends State<AddArticleScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Add Article')),
-      body: SingleChildScrollView(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          children: [
-            TextField(
-              controller: _titleController,
-              decoration: const InputDecoration(labelText: 'Title'),
+      extendBodyBehindAppBar: true,
+      appBar: AppBar(
+        title: const Text('Add Article'),
+        backgroundColor: Colors.transparent,
+        elevation: 0,
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back),
+          onPressed: () => Navigator.pop(context),
+        ),
+      ),
+      body: DecoratedBox(
+        decoration: const BoxDecoration(
+          gradient: LinearGradient(
+            colors: [Colors.blueAccent, Colors.purpleAccent],
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
+          ),
+        ),
+        child: SafeArea(
+          child: Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: Column(
+              children: [
+                TextField(
+                  controller: _titleController,
+                  decoration: InputDecoration(
+                    labelText: 'Title',
+                    labelStyle: const TextStyle(color: Colors.white),
+                    hintText: 'Enter the title',
+                    hintStyle: const TextStyle(color: Colors.white70),
+                    border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
+                    filled: true,
+                    fillColor: Colors.white.withOpacity(0.2),
+                  ),
+                ),
+                const SizedBox(height: 16),
+                TextField(
+                  controller: _contentController,
+                  decoration: InputDecoration(
+                    labelText: 'Content',
+                    labelStyle: const TextStyle(color: Colors.white),
+                    hintText: 'Enter the content',
+                    hintStyle: const TextStyle(color: Colors.white70),
+                    border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
+                    filled: true,
+                    fillColor: Colors.white.withOpacity(0.2),
+                  ),
+                  maxLines: 5,
+                ),
+                const SizedBox(height: 20),
+                GestureDetector(
+                  onTap: _pickImage,
+                  child: Container(
+                    height: 150,
+                    width: double.infinity,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(12),
+                      color: Colors.white.withOpacity(0.2),
+                      border: Border.all(color: Colors.white.withOpacity(0.5)),
+                    ),
+                    child: _imagePath != null
+                        ? ClipRRect(
+                            borderRadius: BorderRadius.circular(12),
+                            child: Image.file(
+                              File(_imagePath!),
+                              fit: BoxFit.cover,
+                            ),
+                          )
+                        : Center(
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Icon(Icons.image, size: 50, color: Colors.white),
+                                const SizedBox(height: 8),
+                                Text(
+                                  'Tap to add image',
+                                  style: TextStyle(color: Colors.white),
+                                ),
+                              ],
+                            ),
+                          ),
+                  ),
+                ),
+                const SizedBox(height: 20),
+                SizedBox(
+                  width: double.infinity,
+                  child: ElevatedButton(
+                    onPressed: _saveArticle,
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.orangeAccent,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                      padding: const EdgeInsets.symmetric(vertical: 16),
+                    ),
+                    child: const Text('Save Article'),
+                  ),
+                ),
+              ],
             ),
-            TextField(
-              controller: _contentController,
-              decoration: const InputDecoration(labelText: 'Content'),
-              maxLines: 5,
-            ),
-            const SizedBox(height: 10),
-            if (_imagePath != null)
-              Image.file(File(_imagePath!), height: 100, width: 100, fit: BoxFit.cover)
-            else
-              const Icon(Icons.image, size: 100),
-            const SizedBox(height: 10),
-            ElevatedButton(
-              onPressed: _pickImage,
-              child: const Text('Pick Image'),
-            ),
-            const SizedBox(height: 20),
-            ElevatedButton(
-              onPressed: _saveArticle,
-              child: const Text('Save Article'),
-            ),
-          ],
+          ),
         ),
       ),
     );

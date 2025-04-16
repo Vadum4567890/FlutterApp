@@ -1,10 +1,12 @@
 // ignore_for_file: library_private_types_in_public_api, use_build_context_synchronously
 
 import 'package:flutter/material.dart';
-import 'package:my_project/services/auth_service.dart';
+import 'package:my_project/domain/services/auth_service.dart';
 
 class LoginScreen extends StatefulWidget {
-  const LoginScreen({super.key});
+  final AuthService authService;
+
+  const LoginScreen({required this.authService, super.key});
 
   @override
   _LoginScreenState createState() => _LoginScreenState();
@@ -16,10 +18,16 @@ class _LoginScreenState extends State<LoginScreen> {
   String _errorMessage = '';
 
   Future<void> _handleLogin() async {
-    if (await AuthService.login(_usernameController.text, _passwordController.text)) {
-      Navigator.pushNamed(context, '/home');
+    final username = _usernameController.text.trim();
+    final password = _passwordController.text;
+
+    final success = await widget.authService.login(username, password);
+    if (success) {
+      Navigator.pushReplacementNamed(context, '/home');
     } else {
-      setState(() => _errorMessage = 'Invalid username or password');
+      setState(() {
+        _errorMessage = 'Login failed. Please try again.';
+      });
     }
   }
 
@@ -63,6 +71,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 const SizedBox(height: 10),
                 TextField(
                   controller: _passwordController,
+                  obscureText: true,
                   decoration: InputDecoration(
                     labelText: 'Password',
                     filled: true,
@@ -71,7 +80,6 @@ class _LoginScreenState extends State<LoginScreen> {
                       borderRadius: BorderRadius.circular(12),
                     ),
                   ),
-                  obscureText: true,
                 ),
                 if (_errorMessage.isNotEmpty)
                   Padding(

@@ -1,48 +1,60 @@
 import 'package:flutter/material.dart';
+import 'package:my_project/core/interfaces/auth_storage_interface.dart';
+import 'package:my_project/data/local/shared_prefs_auth_storage.dart';
+import 'package:my_project/domain/services/article_service.dart';
+import 'package:my_project/domain/services/auth_service.dart';
 import 'package:my_project/screens/article_list_screen.dart';
 import 'package:my_project/screens/auth/login_screen.dart';
 import 'package:my_project/screens/auth/register_screen.dart';
 import 'package:my_project/screens/profile.screen.dart';
-import 'package:my_project/services/auth_service.dart';
 
 void main() {
-  runApp(ArticleApp());
+  final IAuthStorage authStorage = SharedPrefsAuthStorage();
+  final AuthService authService = AuthService(authStorage);
+  final ArticleService articleService = ArticleService();
+
+  runApp(ArticleApp(authService: authService, articleService: articleService)); 
 }
 
 class ArticleApp extends StatelessWidget {
+  final AuthService authService;
+  final ArticleService articleService;
+  const ArticleApp({required this.authService, required this.articleService, super.key});
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Articles App',
       theme: ThemeData(primarySwatch: Colors.blue),
       home: FutureBuilder<String>(
-        future: _getInitialRoute(),
+        future: _getInitialRoute(authService),
         builder: (context, snapshot) {
-          if (snapshot.connectionState == ConnectionState.done) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return const Center(child: CircularProgressIndicator());
+          } else if (snapshot.connectionState == ConnectionState.done) {
             if (snapshot.hasData) {
               final String initialRoute = snapshot.data!;
               return initialRoute == '/login'
-                  ? const LoginScreen()
-                  : ArticleListScreen();
+                  ? LoginScreen(authService: authService)
+                  : ArticleListScreen(authService: authService, articleService: articleService);
             } else {
               return const Center(child: CircularProgressIndicator());
             }
-          } else {
-            return const Center(child: CircularProgressIndicator());
           }
+          return const Center(child: CircularProgressIndicator());
         },
       ),
       routes: {
-        '/login': (context) => const LoginScreen(),
-        '/register': (context) => const RegisterScreen(),
-        '/profile': (context) => const ProfileScreen(),
-        '/home': (context) => ArticleListScreen(),
+        '/login': (context) => LoginScreen(authService: authService),
+        '/register': (context) => RegisterScreen(authService: authService),
+        '/profile': (context) => ProfileScreen(authService: authService),
+        '/home': (context) => ArticleListScreen(authService: authService, articleService: articleService),
       },
     );
   }
 
-  Future<String> _getInitialRoute() async {
-    final currentUser = await AuthService.currentUser;
+   Future<String> _getInitialRoute(AuthService authService) async {
+    final currentUser = await authService.getCurrentUser();
     return currentUser == null ? '/login' : '/home';
   }
 }
