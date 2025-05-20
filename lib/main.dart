@@ -6,6 +6,7 @@ import 'package:my_project/domain/services/auth_service.dart';
 import 'package:my_project/screens/article_list_screen.dart';
 import 'package:my_project/screens/auth/login_screen.dart';
 import 'package:my_project/screens/auth/register_screen.dart';
+import 'package:my_project/screens/non_found_screen.dart';
 import 'package:my_project/screens/profile.screen.dart';
 
 void main() {
@@ -13,13 +14,14 @@ void main() {
   final AuthService authService = AuthService(authStorage);
   final ArticleService articleService = ArticleService();
 
-  runApp(ArticleApp(authService: authService, articleService: articleService)); 
+  runApp(ArticleApp(authService: authService, articleService: articleService));
 }
 
 class ArticleApp extends StatelessWidget {
   final AuthService authService;
   final ArticleService articleService;
-  const ArticleApp({required this.authService, required this.articleService, super.key});
+  const ArticleApp(
+      {required this.authService, required this.articleService, super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -36,7 +38,8 @@ class ArticleApp extends StatelessWidget {
               final String initialRoute = snapshot.data!;
               return initialRoute == '/login'
                   ? LoginScreen(authService: authService)
-                  : ArticleListScreen(authService: authService, articleService: articleService);
+                  : ArticleListScreen(
+                      authService: authService, articleService: articleService);
             } else {
               return const Center(child: CircularProgressIndicator());
             }
@@ -48,12 +51,16 @@ class ArticleApp extends StatelessWidget {
         '/login': (context) => LoginScreen(authService: authService),
         '/register': (context) => RegisterScreen(authService: authService),
         '/profile': (context) => ProfileScreen(authService: authService),
-        '/home': (context) => ArticleListScreen(authService: authService, articleService: articleService),
+        '/home': (context) => ArticleListScreen(
+            authService: authService, articleService: articleService),
       },
+      onUnknownRoute: (settings) => MaterialPageRoute(
+        builder: (context) => const NotFoundScreen(),
+      ),
     );
   }
 
-   Future<String> _getInitialRoute(AuthService authService) async {
+  Future<String> _getInitialRoute(AuthService authService) async {
     final currentUser = await authService.getCurrentUser();
     return currentUser == null ? '/login' : '/home';
   }

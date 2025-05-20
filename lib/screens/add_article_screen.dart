@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:path_provider/path_provider.dart';
 
 class AddArticleScreen extends StatefulWidget {
   final void Function(String, String, String?) onAdd;
@@ -17,12 +18,27 @@ class _AddArticleScreenState extends State<AddArticleScreen> {
   String? _imagePath;
 
   Future<void> _pickImage() async {
-    final pickedFile = await ImagePicker().pickImage(source: ImageSource.gallery);
+    final pickedFile =
+        await ImagePicker().pickImage(source: ImageSource.gallery);
     if (pickedFile != null) {
+      final appDir = await _getAppDirectory();
+      final fileName = pickedFile.name;
+      final savedImagePath = '${appDir.path}/$fileName';
+
+      // Save the image to the app directory
+      await pickedFile.saveTo(savedImagePath);
+
+      // Update the state with the path to the saved image
       setState(() {
-        _imagePath = pickedFile.path;
+        _imagePath = savedImagePath;
       });
     }
+  }
+
+  // Get the directory where you can store files
+  Future<Directory> _getAppDirectory() async {
+    final appDir = await getApplicationDocumentsDirectory();
+    return appDir;
   }
 
   void _saveArticle() {
@@ -73,7 +89,8 @@ class _AddArticleScreenState extends State<AddArticleScreen> {
                     labelStyle: const TextStyle(color: Colors.white),
                     hintText: 'Enter the title',
                     hintStyle: const TextStyle(color: Colors.white70),
-                    border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
+                    border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(12)),
                     filled: true,
                     fillColor: Colors.white.withOpacity(0.2),
                   ),
@@ -86,7 +103,8 @@ class _AddArticleScreenState extends State<AddArticleScreen> {
                     labelStyle: const TextStyle(color: Colors.white),
                     hintText: 'Enter the content',
                     hintStyle: const TextStyle(color: Colors.white70),
-                    border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
+                    border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(12)),
                     filled: true,
                     fillColor: Colors.white.withOpacity(0.2),
                   ),
@@ -115,7 +133,8 @@ class _AddArticleScreenState extends State<AddArticleScreen> {
                             child: Column(
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
-                                Icon(Icons.image, size: 50, color: Colors.white),
+                                Icon(Icons.image,
+                                    size: 50, color: Colors.white),
                                 const SizedBox(height: 8),
                                 Text(
                                   'Tap to add image',

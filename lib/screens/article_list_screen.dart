@@ -1,5 +1,3 @@
-// ignore_for_file: inference_failure_on_instance_creation, use_build_context_synchronously, unnecessary_null_comparison, library_private_types_in_public_api
-
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:my_project/core/interfaces/article_service_interface.dart';
@@ -33,6 +31,7 @@ class _ArticleListScreenState extends State<ArticleListScreen> {
   }
 
   void _loadArticles() async {
+    // Fetch articles on app start or after re-login
     final loadedArticles = await widget.articleService.getArticles();
     setState(() {
       articles = loadedArticles;
@@ -56,8 +55,10 @@ class _ArticleListScreenState extends State<ArticleListScreen> {
     );
   }
 
-  void _editArticle(int index, String title, String content, String? imagePath) async {
-    final author = (await widget.authService.getCurrentUser()) ?? 'Unknown User';
+  void _editArticle(
+      int index, String title, String content, String? imagePath) async {
+    final author =
+        (await widget.authService.getCurrentUser()) ?? 'Unknown User';
     final updatedArticle = Article(
       id: articles[index].id,
       title: title,
@@ -113,6 +114,11 @@ class _ArticleListScreenState extends State<ArticleListScreen> {
             onPressed: () => Navigator.pushNamed(context, '/profile'),
           ),
           IconButton(
+            icon: const Icon(Icons.error_outline, color: Colors.white),
+            onPressed: () =>
+                Navigator.pushNamed(context, '/non-existent-route'),
+          ),
+          IconButton(
             icon: const Icon(Icons.logout, color: Colors.white),
             onPressed: () async {
               await widget.authService.logout();
@@ -146,28 +152,23 @@ class _ArticleListScreenState extends State<ArticleListScreen> {
                       child: ListTile(
                         contentPadding: const EdgeInsets.all(12),
                         leading: articles[index].imagePath != null
-                            ? ClipRRect(
-                                borderRadius: BorderRadius.circular(8),
-                                child: Image.file(
-                                  File(articles[index].imagePath!),
-                                  width: 50,
-                                  height: 50,
-                                  fit: BoxFit.cover,
-                                ),
-                              )
-                            : Icon(Icons.image_not_supported, color: Colors.white),
+                            ? _buildImage(articles[index].imagePath!)
+                            : const Icon(Icons.image_not_supported,
+                                color: Colors.white),
                         title: Text(
                           articles[index].title,
                           style: const TextStyle(color: Colors.white),
                         ),
                         subtitle: Text(
                           'by ${articles[index].author}',
-                          style: TextStyle(color: Colors.white.withOpacity(0.7)),
+                          style:
+                              TextStyle(color: Colors.white.withOpacity(0.7)),
                         ),
                         trailing: FutureBuilder<bool>(
                           future: _canEditOrDelete(articles[index]),
                           builder: (context, snapshot) {
-                            if (snapshot.connectionState == ConnectionState.waiting) {
+                            if (snapshot.connectionState ==
+                                ConnectionState.waiting) {
                               return const CircularProgressIndicator();
                             }
                             if (snapshot.data == true) {
@@ -175,11 +176,14 @@ class _ArticleListScreenState extends State<ArticleListScreen> {
                                 mainAxisSize: MainAxisSize.min,
                                 children: [
                                   IconButton(
-                                    icon: const Icon(Icons.edit, color: Colors.white),
-                                    onPressed: () => _showEditDialog(index, articles[index]),
+                                    icon: const Icon(Icons.edit,
+                                        color: Colors.white),
+                                    onPressed: () =>
+                                        _showEditDialog(index, articles[index]),
                                   ),
                                   IconButton(
-                                    icon: const Icon(Icons.delete, color: Colors.white),
+                                    icon: const Icon(Icons.delete,
+                                        color: Colors.white),
                                     onPressed: () => _showDeleteDialog(index),
                                   ),
                                 ],
@@ -222,8 +226,26 @@ class _ArticleListScreenState extends State<ArticleListScreen> {
     );
   }
 
+  Widget _buildImage(String imagePath) {
+    final file = File(imagePath);
+    if (file.existsSync()) {
+      return ClipRRect(
+        borderRadius: BorderRadius.circular(8),
+        child: Image.file(
+          file,
+          width: 50,
+          height: 50,
+          fit: BoxFit.cover,
+        ),
+      );
+    } else {
+      return const Icon(Icons.image_not_supported, color: Colors.white);
+    }
+  }
+
   void _addArticle(String title, String content, String? imagePath) async {
-    final author = (await widget.authService.getCurrentUser()) ?? 'Unknown User';
+    final author =
+        (await widget.authService.getCurrentUser()) ?? 'Unknown User';
     final newArticle = Article(
       title: title,
       content: content,

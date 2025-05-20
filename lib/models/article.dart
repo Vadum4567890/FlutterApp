@@ -17,22 +17,25 @@ class Article {
 
   static Article fromMap(Map<String, dynamic> map) {
     return Article(
-      id: map['id'] as int? ?? 0, 
-      title: map['title'] as String,
-      content: map['content'] as String,
-      imagePath: map['imagePath'] as String?,
-      author: map['author'] as String?,
+      id: map['id'] is int ? map['id'] as int : 0,
+      title: map['title']?.toString() ?? '',
+      content: map['content']?.toString() ?? '',
+      imagePath: map['imagePath']?.toString(),
+      author: map['author']?.toString(),
     );
   }
 
   Map<String, dynamic> toMap() {
-    return {
-      'id': id,
+    final Map<String, dynamic> map = {
       'title': title,
       'content': content,
       'imagePath': imagePath,
       'author': author,
     };
+    if (id != 0) {
+      map['id'] = id;
+    }
+    return map;
   }
 
   @override

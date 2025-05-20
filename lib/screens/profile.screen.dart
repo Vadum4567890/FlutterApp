@@ -1,9 +1,10 @@
-// ignore_for_file: avoid_redundant_argument_values, library_private_types_in_public_api
+// ignore_for_file: library_private_types_in_public_api, inference_failure_on_instance_creation, inference_failure_on_function_invocation
 
 import 'package:flutter/material.dart';
 import 'package:my_project/domain/services/auth_service.dart';
 import 'package:my_project/models/user.dart';
 import 'package:my_project/screens/additional/change_password_dialog.dart';
+import 'package:my_project/screens/devices_screen.dart';
 
 class ProfileScreen extends StatefulWidget {
   final AuthService authService;
@@ -39,6 +40,34 @@ class _ProfileScreenState extends State<ProfileScreen> {
     );
   }
 
+  // Function to show the logout confirmation dialog
+  void _showLogoutConfirmationDialog(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text('Are you sure?'),
+          content: const Text('Do you want to log out of your account?'),
+          actions: <Widget>[
+            TextButton(
+              child: const Text('No'),
+              onPressed: () {
+                Navigator.of(context).pop(); // Close the dialog
+              },
+            ),
+            TextButton(
+              child: const Text('Yes'),
+              onPressed: () {
+                widget.authService.logout();
+                Navigator.pushReplacementNamed(context, '/login');
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -50,135 +79,156 @@ class _ProfileScreenState extends State<ProfileScreen> {
             end: Alignment.bottomRight,
           ),
         ),
-        child: Center(
+        child: SafeArea(
           child: Padding(
-            padding: const EdgeInsets.all(16.0),
+            padding:
+                const EdgeInsets.symmetric(horizontal: 24.0, vertical: 32.0),
             child: Column(
-              mainAxisAlignment: MainAxisAlignment.start,
               children: [
-                CircleAvatar(
-                  radius: 50,
-                  backgroundColor: Colors.white,
-                  child: Icon(Icons.person, size: 50, color: Colors.blueAccent),
+                Align(
+                  alignment: Alignment.topLeft,
+                  child: IconButton(
+                    icon: const Icon(Icons.arrow_back, color: Colors.white),
+                    onPressed: () => Navigator.pop(context),
+                  ),
                 ),
                 const SizedBox(height: 20),
-                if (user == null)
-                  const CircularProgressIndicator()
-                else
-                  Column(
-                    children: [
-                      Text(
-                        'Email: ${user?.email}',
-                        style: const TextStyle(
-                          fontSize: 20,
-                          color: Colors.white,
+                Expanded(
+                  child: SingleChildScrollView(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        CircleAvatar(
+                          radius: 50,
+                          backgroundColor: Colors.white,
+                          child: Icon(Icons.person,
+                              size: 50, color: Colors.blueAccent),
                         ),
-                      ),
-                      const SizedBox(height: 10),
-                      Text(
-                        'Username: ${user?.username}',
-                        style: const TextStyle(
-                          fontSize: 20,
-                          color: Colors.white,
+                        const SizedBox(height: 30),
+                        if (user == null)
+                          const CircularProgressIndicator()
+                        else
+                          Column(
+                            children: [
+                              _buildInfoCard('Email', user?.email),
+                              _buildInfoCard('Username', user?.username),
+                            ],
+                          ),
+                        const SizedBox(height: 40),
+
+                        // Кнопка переходу на DevicesScreen
+                        _buildActionButton(
+                          text: 'My Devices',
+                          color: Colors.tealAccent.shade700,
+                          textColor: Colors.white,
+                          onPressed: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => const DevicesScreen(),
+                              ),
+                            );
+                          },
                         ),
-                      ),
-                    ],
-                  ),
-                const SizedBox(height: 20),
-                GestureDetector(
-                  onTap: () => Navigator.pop(context),
-                  child: Container(
-                    width: double.infinity,
-                    padding: const EdgeInsets.symmetric(vertical: 15),
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.circular(12),
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.black26,
-                          blurRadius: 5,
-                          offset: const Offset(0, 3),
+
+                        const SizedBox(height: 16),
+
+                        _buildActionButton(
+                          text: 'Back to Home',
+                          color: Colors.white,
+                          textColor: Colors.blueAccent,
+                          onPressed: () => Navigator.pop(context),
+                        ),
+
+                        const SizedBox(height: 16),
+
+                        _buildActionButton(
+                          text: 'Change Password',
+                          color: Colors.orangeAccent,
+                          textColor: Colors.white,
+                          onPressed: () => _showChangePasswordDialog(context),
+                        ),
+
+                        const SizedBox(height: 16),
+
+                        _buildActionButton(
+                          text: 'Logout',
+                          color: Colors.redAccent,
+                          textColor: Colors.white,
+                          onPressed: () =>
+                              _showLogoutConfirmationDialog(context),
                         ),
                       ],
-                    ),
-                    child: const Center(
-                      child: Text(
-                        'Back to Home',
-                        style: TextStyle(
-                          fontSize: 18,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.blueAccent,
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
-                const SizedBox(height: 10),
-                GestureDetector(
-                  onTap: () {
-                    _showChangePasswordDialog(context);
-                  },
-                  child: Container(
-                    width: double.infinity,
-                    padding: const EdgeInsets.symmetric(vertical: 15),
-                    decoration: BoxDecoration(
-                      color: Colors.orangeAccent,
-                      borderRadius: BorderRadius.circular(12),
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.black26,
-                          blurRadius: 5,
-                          offset: const Offset(0, 3),
-                        ),
-                      ],
-                    ),
-                    child: const Center(
-                      child: Text(
-                        'Change Password',
-                        style: TextStyle(
-                          fontSize: 18,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.white,
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
-                const SizedBox(height: 10),
-                const Spacer(),
-                GestureDetector(
-                  onTap: () {
-                    widget.authService.logout();
-                    Navigator.pushReplacementNamed(context, '/login');
-                  },
-                  child: Container(
-                    width: double.infinity,
-                    padding: const EdgeInsets.symmetric(vertical: 15),
-                    decoration: BoxDecoration(
-                      color: Colors.redAccent,
-                      borderRadius: BorderRadius.circular(12),
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.black26,
-                          blurRadius: 5,
-                          offset: const Offset(0, 3),
-                        ),
-                      ],
-                    ),
-                    child: const Center(
-                      child: Text(
-                        'Logout',
-                        style: TextStyle(
-                          fontSize: 18,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.white,
-                        ),
-                      ),
                     ),
                   ),
                 ),
               ],
             ),
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildInfoCard(String label, String? value) {
+    return Container(
+      width: double.infinity,
+      padding: const EdgeInsets.all(16),
+      margin: const EdgeInsets.only(bottom: 16),
+      decoration: BoxDecoration(
+        color: Colors.white.withOpacity(0.1),
+        borderRadius: BorderRadius.circular(12),
+        border: Border.all(color: Colors.white.withOpacity(0.3)),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            label,
+            style: TextStyle(
+              fontSize: 14,
+              color: Colors.white.withOpacity(0.8),
+            ),
+          ),
+          const SizedBox(height: 4),
+          Text(
+            value ?? 'Not available',
+            style: const TextStyle(
+              fontSize: 18,
+              color: Colors.white,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildActionButton({
+    required String text,
+    required Color color,
+    required Color textColor,
+    required VoidCallback onPressed,
+  }) {
+    return SizedBox(
+      width: double.infinity,
+      child: ElevatedButton(
+        style: ElevatedButton.styleFrom(
+          backgroundColor: color,
+          padding: const EdgeInsets.symmetric(vertical: 16),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(12),
+          ),
+          elevation: 3,
+          shadowColor: Colors.black26,
+        ),
+        onPressed: onPressed,
+        child: Text(
+          text,
+          style: TextStyle(
+            fontSize: 18,
+            fontWeight: FontWeight.bold,
+            color: textColor,
           ),
         ),
       ),
