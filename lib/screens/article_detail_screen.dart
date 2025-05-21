@@ -17,7 +17,6 @@ class ArticleDetailScreen extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // Відображення зображення статті або іконки-заповнювача
             if (article.imagePath != null)
               Center(
                 child: Image.file(
@@ -31,8 +30,6 @@ class ArticleDetailScreen extends StatelessWidget {
                 child: Icon(Icons.image_not_supported, size: 200),
               ),
             SizedBox(height: 20),
-
-            // Блок інформації про автора та зміст статті
             Container(
               padding: EdgeInsets.all(12),
               decoration: BoxDecoration(
