@@ -1,3 +1,5 @@
+// ignore_for_file: unnecessary_null_comparison, inference_failure_on_instance_creation, use_build_context_synchronously, library_private_types_in_public_api
+
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:my_project/core/interfaces/article_service_interface.dart';
@@ -56,7 +58,11 @@ class _ArticleListScreenState extends State<ArticleListScreen> {
   }
 
   void _editArticle(
-      int index, String title, String content, String? imagePath) async {
+    int index,
+    String title,
+    String content,
+    String? imagePath,
+  ) async {
     final author =
         (await widget.authService.getCurrentUser()) ?? 'Unknown User';
     final updatedArticle = Article(
@@ -110,6 +116,10 @@ class _ArticleListScreenState extends State<ArticleListScreen> {
         title: const Text('Articles', style: TextStyle(color: Colors.white)),
         actions: [
           IconButton(
+            icon: const Icon(Icons.qr_code, color: Colors.white),
+            onPressed: () => Navigator.pushNamed(context, '/saved_qr'),
+          ),
+          IconButton(
             icon: const Icon(Icons.person, color: Colors.white),
             onPressed: () => Navigator.pushNamed(context, '/profile'),
           ),
@@ -153,8 +163,10 @@ class _ArticleListScreenState extends State<ArticleListScreen> {
                         contentPadding: const EdgeInsets.all(12),
                         leading: articles[index].imagePath != null
                             ? _buildImage(articles[index].imagePath!)
-                            : const Icon(Icons.image_not_supported,
-                                color: Colors.white),
+                            : const Icon(
+                                Icons.image_not_supported,
+                                color: Colors.white,
+                              ),
                         title: Text(
                           articles[index].title,
                           style: const TextStyle(color: Colors.white),
@@ -176,14 +188,18 @@ class _ArticleListScreenState extends State<ArticleListScreen> {
                                 mainAxisSize: MainAxisSize.min,
                                 children: [
                                   IconButton(
-                                    icon: const Icon(Icons.edit,
-                                        color: Colors.white),
+                                    icon: const Icon(
+                                      Icons.edit,
+                                      color: Colors.white,
+                                    ),
                                     onPressed: () =>
                                         _showEditDialog(index, articles[index]),
                                   ),
                                   IconButton(
-                                    icon: const Icon(Icons.delete,
-                                        color: Colors.white),
+                                    icon: const Icon(
+                                      Icons.delete,
+                                      color: Colors.white,
+                                    ),
                                     onPressed: () => _showDeleteDialog(index),
                                   ),
                                 ],

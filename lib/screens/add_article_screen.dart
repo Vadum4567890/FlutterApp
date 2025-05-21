@@ -90,7 +90,8 @@ class _AddArticleScreenState extends State<AddArticleScreen> {
                     hintText: 'Enter the title',
                     hintStyle: const TextStyle(color: Colors.white70),
                     border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(12)),
+                      borderRadius: BorderRadius.circular(12),
+                    ),
                     filled: true,
                     fillColor: Colors.white.withOpacity(0.2),
                   ),
@@ -104,7 +105,8 @@ class _AddArticleScreenState extends State<AddArticleScreen> {
                     hintText: 'Enter the content',
                     hintStyle: const TextStyle(color: Colors.white70),
                     border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(12)),
+                      borderRadius: BorderRadius.circular(12),
+                    ),
                     filled: true,
                     fillColor: Colors.white.withOpacity(0.2),
                   ),
@@ -133,8 +135,11 @@ class _AddArticleScreenState extends State<AddArticleScreen> {
                             child: Column(
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
-                                Icon(Icons.image,
-                                    size: 50, color: Colors.white),
+                                Icon(
+                                  Icons.image,
+                                  size: 50,
+                                  color: Colors.white,
+                                ),
                                 const SizedBox(height: 8),
                                 Text(
                                   'Tap to add image',

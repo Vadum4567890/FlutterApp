@@ -3,25 +3,39 @@ import 'package:my_project/core/interfaces/auth_storage_interface.dart';
 import 'package:my_project/data/local/shared_prefs_auth_storage.dart';
 import 'package:my_project/domain/services/article_service.dart';
 import 'package:my_project/domain/services/auth_service.dart';
+import 'package:my_project/domain/services/usb_service.dart';
 import 'package:my_project/screens/article_list_screen.dart';
 import 'package:my_project/screens/auth/login_screen.dart';
 import 'package:my_project/screens/auth/register_screen.dart';
 import 'package:my_project/screens/non_found_screen.dart';
 import 'package:my_project/screens/profile.screen.dart';
+import 'package:my_project/screens/saved_qr_screen.dart';
 
 void main() {
   final IAuthStorage authStorage = SharedPrefsAuthStorage();
   final AuthService authService = AuthService(authStorage);
   final ArticleService articleService = ArticleService();
+  final UsbService usbService = UsbService();
 
-  runApp(ArticleApp(authService: authService, articleService: articleService));
+  runApp(
+    ArticleApp(
+      authService: authService,
+      articleService: articleService,
+      usbService: usbService,
+    ),
+  );
 }
 
 class ArticleApp extends StatelessWidget {
   final AuthService authService;
   final ArticleService articleService;
-  const ArticleApp(
-      {required this.authService, required this.articleService, super.key});
+  final UsbService usbService;
+  const ArticleApp({
+    required this.authService,
+    required this.articleService,
+    required this.usbService,
+    super.key,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -52,7 +66,10 @@ class ArticleApp extends StatelessWidget {
         '/register': (context) => RegisterScreen(authService: authService),
         '/profile': (context) => ProfileScreen(authService: authService),
         '/home': (context) => ArticleListScreen(
-            authService: authService, articleService: articleService),
+              authService: authService,
+              articleService: articleService,
+            ),
+        '/saved_qr': (context) => SavedQrScreen(usbService: usbService),
       },
       onUnknownRoute: (settings) => MaterialPageRoute(
         builder: (context) => const NotFoundScreen(),

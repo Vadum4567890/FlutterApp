@@ -17,12 +17,10 @@ class MqttService {
     _client = MqttServerClient(server, clientIdentifier)..port = port;
   }
 
-  /// Порт, який буде передано в клієнта
   final int port;
 
   Future<void> connect() async {
     try {
-      // Додаткові налаштування (TLS, keepAlive тощо) можна виставити тут
       await _client.connect();
     } catch (e) {
       throw Exception('Failed to connect to MQTT: $e');
