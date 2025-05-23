@@ -14,10 +14,19 @@ class AddArticleScreen extends StatefulWidget {
 class _AddArticleScreenState extends State<AddArticleScreen> {
   final _titleController = TextEditingController();
   final _contentController = TextEditingController();
+
   String? _imagePath;
 
+  @override
+  void dispose() {
+    _titleController.dispose();
+    _contentController.dispose();
+    super.dispose();
+  }
+
   Future<void> _pickImage() async {
-    final pickedFile = await ImagePicker().pickImage(source: ImageSource.gallery);
+    final pickedFile =
+        await ImagePicker().pickImage(source: ImageSource.gallery);
     if (pickedFile != null) {
       setState(() {
         _imagePath = pickedFile.path;
@@ -35,8 +44,8 @@ class _AddArticleScreenState extends State<AddArticleScreen> {
       );
       return;
     }
-
     widget.onAdd(title, content, _imagePath);
+
     Navigator.pop(context);
   }
 
@@ -68,12 +77,28 @@ class _AddArticleScreenState extends State<AddArticleScreen> {
               children: [
                 TextField(
                   controller: _titleController,
+                  style: const TextStyle(
+                      color: Colors.white), // Text color for input
                   decoration: InputDecoration(
                     labelText: 'Title',
                     labelStyle: const TextStyle(color: Colors.white),
                     hintText: 'Enter the title',
                     hintStyle: const TextStyle(color: Colors.white70),
-                    border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(12),
+                      borderSide: BorderSide.none, // Remove default border
+                    ),
+                    enabledBorder: OutlineInputBorder(
+                      // Border when enabled
+                      borderRadius: BorderRadius.circular(12),
+                      borderSide:
+                          BorderSide(color: Colors.white.withOpacity(0.5)),
+                    ),
+                    focusedBorder: OutlineInputBorder(
+                      // Border when focused
+                      borderRadius: BorderRadius.circular(12),
+                      borderSide: const BorderSide(color: Colors.white),
+                    ),
                     filled: true,
                     fillColor: Colors.white.withOpacity(0.2),
                   ),
@@ -81,12 +106,26 @@ class _AddArticleScreenState extends State<AddArticleScreen> {
                 const SizedBox(height: 16),
                 TextField(
                   controller: _contentController,
+                  style: const TextStyle(
+                      color: Colors.white), // Text color for input
                   decoration: InputDecoration(
                     labelText: 'Content',
                     labelStyle: const TextStyle(color: Colors.white),
                     hintText: 'Enter the content',
                     hintStyle: const TextStyle(color: Colors.white70),
-                    border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(12),
+                      borderSide: BorderSide.none,
+                    ),
+                    enabledBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(12),
+                      borderSide:
+                          BorderSide(color: Colors.white.withOpacity(0.5)),
+                    ),
+                    focusedBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(12),
+                      borderSide: const BorderSide(color: Colors.white),
+                    ),
                     filled: true,
                     fillColor: Colors.white.withOpacity(0.2),
                   ),
@@ -115,7 +154,8 @@ class _AddArticleScreenState extends State<AddArticleScreen> {
                             child: Column(
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
-                                Icon(Icons.image, size: 50, color: Colors.white),
+                                Icon(Icons.image,
+                                    size: 50, color: Colors.white),
                                 const SizedBox(height: 8),
                                 Text(
                                   'Tap to add image',
@@ -138,7 +178,11 @@ class _AddArticleScreenState extends State<AddArticleScreen> {
                       ),
                       padding: const EdgeInsets.symmetric(vertical: 16),
                     ),
-                    child: const Text('Save Article'),
+                    child: const Text(
+                      'Save Article',
+                      style: TextStyle(
+                          color: Colors.white), // Ensure text color is visible
+                    ),
                   ),
                 ),
               ],
