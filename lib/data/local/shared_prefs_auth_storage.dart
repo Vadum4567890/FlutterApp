@@ -11,7 +11,6 @@ class SharedPrefsAuthStorage implements IAuthStorage {
     final prefs = await SharedPreferences.getInstance();
     final userMap = user.toMap();
 
-    // Перетворення Map в JSON рядок і збереження в SharedPreferences
     await prefs.setString(user.username, jsonEncode(userMap));  
     return true;
   }
@@ -23,10 +22,9 @@ class SharedPrefsAuthStorage implements IAuthStorage {
 
     if (userMapString == null) return null;
 
-    // Перетворення JSON рядка в Map<String, dynamic>
     final userMap = jsonDecode(userMapString) as Map<String, dynamic>;
 
-    return User.fromMap(userMap);  // Викликаємо метод fromMap з правильно типізованим userMap
+    return User.fromMap(userMap);
   }
 
   @override

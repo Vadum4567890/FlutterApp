@@ -1,6 +1,3 @@
-// lib/domain/models/article_database.dart
-
-// ignore_for_file: depend_on_reference
 import 'package:my_project/models/article.dart';
 import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
@@ -11,36 +8,28 @@ class ArticleDatabase {
       join(await getDatabasesPath(), 'articles.db'),
       onCreate: (db, version) {
         return db.execute(
-          'CREATE TABLE articles(id INTEGER PRIMARY KEY, title TEXT, content TEXT, author TEXT, imagePath TEXT)',
+          'CREATE TABLE articles(id INTEGER PRIMARY KEY AUTOINCREMENT, title TEXT, content TEXT, author TEXT, imagePath TEXT)',
         );
       },
       version: 1,
     );
   }
 
-  static Future<void> insertArticle(Article article) async {
+  static Future<int> insertArticle(Article article) async {
     final db = await database;
-    // Вставка статті та отримання згенерованого ID
     final id = await db.insert(
       'articles',
-      article.toMap(),
+      article.toMapWithoutId(),
       conflictAlgorithm: ConflictAlgorithm.replace,
     );
-
-    article.id = id;  
+    return id;
   }
 
   static Future<List<Article>> articles() async {
     final db = await database;
     final List<Map<String, dynamic>> maps = await db.query('articles');
     return List.generate(maps.length, (i) {
-      return Article(
-        id: maps[i]['id'] as int? ?? 0,  // Значення за замовчуванням
-        title: maps[i]['title'] as String? ?? '',
-        content: maps[i]['content'] as String? ?? '',
-        imagePath: maps[i]['imagePath'] as String?,
-        author: maps[i]['author'] as String? ?? '',
-      );
+      return Article.fromMap(maps[i]);
     });
   }
 
