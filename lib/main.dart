@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:my_project/core/di/di.dart' as di; // Import our DI setup
+import 'package:my_project/core/di/di.dart' as di;
 import 'package:my_project/cubit/article_list/article_cubit.dart';
 import 'package:my_project/cubit/auth/auth_cubit.dart';
 import 'package:my_project/cubit/auth/auth_state.dart';
@@ -25,7 +25,7 @@ class ArticleApp extends StatelessWidget {
       providers: [
         BlocProvider<AuthCubit>(
             create: (context) => di.sl<AuthCubit>()
-              ..checkAuthStatus()), // Check auth on app start
+              ..checkAuthStatus(),),
         BlocProvider<ArticleCubit>(create: (context) => di.sl<ArticleCubit>()),
         BlocProvider<ProfileCubit>(create: (context) => di.sl<ProfileCubit>()),
       ],
