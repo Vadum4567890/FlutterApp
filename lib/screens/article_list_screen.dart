@@ -5,7 +5,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:my_project/cubit/article_list/article_cubit.dart';
 import 'package:my_project/cubit/article_list/article_state.dart';
-import 'package:my_project/cubit/auth/auth_cubit.dart';
 import 'package:my_project/models/article.dart';
 import 'package:my_project/screens/add_article_screen.dart';
 import 'package:my_project/screens/article_detail_screen.dart';
@@ -28,14 +27,12 @@ class ArticleListScreen extends StatelessWidget {
         title: const Text('Articles', style: TextStyle(color: Colors.white)),
         actions: [
           IconButton(
-            icon: const Icon(Icons.person, color: Colors.white),
-            onPressed: () => Navigator.pushNamed(context, '/profile'),
+            icon: const Icon(Icons.qr_code, color: Colors.white),
+            onPressed: () => Navigator.pushNamed(context, '/qr_scanner'),
           ),
           IconButton(
-            icon: const Icon(Icons.logout, color: Colors.white),
-            onPressed: () {
-              context.read<AuthCubit>().logout();
-            },
+            icon: const Icon(Icons.person, color: Colors.white),
+            onPressed: () => Navigator.pushNamed(context, '/profile'),
           ),
         ],
       ),
@@ -90,7 +87,6 @@ class ArticleListScreen extends StatelessWidget {
                           final canModify = snapshot.data ?? false;
                           return ListTile(
                             contentPadding: const EdgeInsets.all(12),
-                            // <--- Змінено тут: обгортаємо ВСЕ в SizedBox
                             leading: SizedBox(
                               width: 50,
                               height: 50,

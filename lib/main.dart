@@ -5,10 +5,13 @@ import 'package:my_project/cubit/article_list/article_cubit.dart';
 import 'package:my_project/cubit/auth/auth_cubit.dart';
 import 'package:my_project/cubit/auth/auth_state.dart';
 import 'package:my_project/cubit/profile/profile_cubit.dart';
+import 'package:my_project/cubit/qr/qr_cubit.dart';
 import 'package:my_project/screens/article_list_screen.dart';
 import 'package:my_project/screens/auth/login_screen.dart';
 import 'package:my_project/screens/auth/register_screen.dart';
 import 'package:my_project/screens/profile_screen.dart';
+import 'package:my_project/screens/qr_scanner_screen.dart';
+import 'package:my_project/screens/saved_qr_screen.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -24,10 +27,11 @@ class ArticleApp extends StatelessWidget {
     return MultiBlocProvider(
       providers: [
         BlocProvider<AuthCubit>(
-            create: (context) => di.sl<AuthCubit>()
-              ..checkAuthStatus(),),
+          create: (context) => di.sl<AuthCubit>()..checkAuthStatus(),
+        ),
         BlocProvider<ArticleCubit>(create: (context) => di.sl<ArticleCubit>()),
         BlocProvider<ProfileCubit>(create: (context) => di.sl<ProfileCubit>()),
+        BlocProvider<QRCubit>(create: (context) => di.sl<QRCubit>()),
       ],
       child: MaterialApp(
         title: 'Articles App',
@@ -48,6 +52,8 @@ class ArticleApp extends StatelessWidget {
           '/register': (context) => const RegisterScreen(),
           '/profile': (context) => const ProfileScreen(),
           '/home': (context) => const ArticleListScreen(),
+          '/qr_scanner': (context) => const QRScannerScreen(),
+          '/saved_qr': (context) => const SavedQrScreen(),
         },
       ),
     );
