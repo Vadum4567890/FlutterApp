@@ -1,6 +1,10 @@
+// lib/screens/add_article_screen.dart
 import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:path/path.dart' as p; // Import path package
+import 'package:path_provider/path_provider.dart'; // Import path_provider
 
 class AddArticleScreen extends StatefulWidget {
   final void Function(String, String, String?) onAdd;
@@ -15,7 +19,7 @@ class _AddArticleScreenState extends State<AddArticleScreen> {
   final _titleController = TextEditingController();
   final _contentController = TextEditingController();
 
-  String? _imagePath;
+  String? _imagePath; // This will now store the persistent path
 
   @override
   void dispose() {
@@ -28,9 +32,35 @@ class _AddArticleScreenState extends State<AddArticleScreen> {
     final pickedFile =
         await ImagePicker().pickImage(source: ImageSource.gallery);
     if (pickedFile != null) {
-      setState(() {
-        _imagePath = pickedFile.path;
-      });
+      // Get the application's documents directory
+      final appDocumentsDir = await getApplicationDocumentsDirectory();
+      // Define a unique file name using current timestamp or a UUID
+      final fileName = p.basename(
+          pickedFile.path); // Use path.basename to get just the file name
+      final uniqueFileName =
+          '${DateTime.now().millisecondsSinceEpoch}_$fileName';
+      final newFilePath = p.join(appDocumentsDir.path, uniqueFileName);
+
+      // Create a File object for the picked image
+      final File originalImageFile = File(pickedFile.path);
+
+      try {
+        // Copy the image file to the new persistent path
+        final File savedImage = await originalImageFile.copy(newFilePath);
+        setState(() {
+          _imagePath =
+              savedImage.path; // Update _imagePath with the persistent path
+        });
+      } catch (e) {
+        // Handle error during file copy (e.g., permission issues)
+        print('Error copying image: $e');
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Failed to save image: ${e.toString()}')),
+        );
+        setState(() {
+          _imagePath = null; // Clear image path on error
+        });
+      }
     }
   }
 
@@ -44,6 +74,7 @@ class _AddArticleScreenState extends State<AddArticleScreen> {
       );
       return;
     }
+    // Now _imagePath contains the persistent path
     widget.onAdd(title, content, _imagePath);
 
     Navigator.pop(context);
@@ -146,7 +177,8 @@ class _AddArticleScreenState extends State<AddArticleScreen> {
                         ? ClipRRect(
                             borderRadius: BorderRadius.circular(12),
                             child: Image.file(
-                              File(_imagePath!),
+                              File(
+                                  _imagePath!), // Now using the persistent path
                               fit: BoxFit.cover,
                             ),
                           )

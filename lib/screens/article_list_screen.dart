@@ -1,3 +1,6 @@
+// lib/screens/article_list_screen.dart
+// ignore_for_file: inference_failure_on_instance_creation
+
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -88,18 +91,30 @@ class ArticleListScreen extends StatelessWidget {
                           final canModify = snapshot.data ?? false;
                           return ListTile(
                             contentPadding: const EdgeInsets.all(12),
-                            leading: article.imagePath != null
-                                ? ClipRRect(
-                                    borderRadius: BorderRadius.circular(8),
-                                    child: Image.file(
-                                      File(article.imagePath!),
-                                      width: 50,
-                                      height: 50,
-                                      fit: BoxFit.cover,
-                                    ),
-                                  )
-                                : const Icon(Icons.image_not_supported,
-                                    color: Colors.white),
+                            // <--- Змінено тут: обгортаємо ВСЕ в SizedBox
+                            leading: SizedBox(
+                              width: 50,
+                              height: 50,
+                              child: article.imagePath != null
+                                  ? ClipRRect(
+                                      borderRadius: BorderRadius.circular(8),
+                                      child: Image.file(
+                                        File(article.imagePath!),
+                                        width: 50,
+                                        height: 50,
+                                        fit: BoxFit.cover,
+                                        // Додано errorBuilder для обробки помилок завантаження зображення
+                                        errorBuilder:
+                                            (context, error, stackTrace) {
+                                          return const Icon(Icons.broken_image,
+                                              color: Colors.red);
+                                        },
+                                      ),
+                                    )
+                                  : const Icon(Icons.image_not_supported,
+                                      color: Colors.white),
+                            ),
+                            // ---> Кінець змін у leading
                             title: Text(
                               article.title,
                               style: const TextStyle(color: Colors.white),
