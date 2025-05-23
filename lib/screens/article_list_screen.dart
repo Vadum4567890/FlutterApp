@@ -1,4 +1,3 @@
-// lib/screens/article_list_screen.dart
 // ignore_for_file: inference_failure_on_instance_creation
 
 import 'dart:io';
@@ -103,18 +102,16 @@ class ArticleListScreen extends StatelessWidget {
                                         width: 50,
                                         height: 50,
                                         fit: BoxFit.cover,
-                                        // Додано errorBuilder для обробки помилок завантаження зображення
                                         errorBuilder:
                                             (context, error, stackTrace) {
                                           return const Icon(Icons.broken_image,
-                                              color: Colors.red);
+                                              color: Colors.red,);
                                         },
                                       ),
                                     )
                                   : const Icon(Icons.image_not_supported,
-                                      color: Colors.white),
+                                      color: Colors.white,),
                             ),
-                            // ---> Кінець змін у leading
                             title: Text(
                               article.title,
                               style: const TextStyle(color: Colors.white),
@@ -122,7 +119,7 @@ class ArticleListScreen extends StatelessWidget {
                             subtitle: Text(
                               'by ${article.author}',
                               style: TextStyle(
-                                  color: Colors.white.withOpacity(0.7)),
+                                  color: Colors.white.withOpacity(0.7),),
                             ),
                             trailing: canModify
                                 ? Row(
@@ -130,22 +127,22 @@ class ArticleListScreen extends StatelessWidget {
                                     children: [
                                       IconButton(
                                         icon: const Icon(Icons.edit,
-                                            color: Colors.white),
+                                            color: Colors.white,),
                                         onPressed: () {
                                           _showEditDialog(context, article);
                                         },
                                       ),
                                       IconButton(
                                         icon: const Icon(Icons.delete,
-                                            color: Colors.white),
+                                            color: Colors.white,),
                                         onPressed: () {
                                           _showDeleteDialog(
-                                              context, article.id!);
+                                              context, article.id!,);
                                         },
                                       ),
                                     ],
                                   )
-                                : null, // No trailing widget if cannot modify
+                                : null,
                             onTap: () {
                               Navigator.push(
                                 context,
@@ -170,7 +167,7 @@ class ArticleListScreen extends StatelessWidget {
                   ),
                 );
               }
-              return const SizedBox.shrink(); // Fallback
+              return const SizedBox.shrink();
             },
           ),
         ),
@@ -207,7 +204,7 @@ class ArticleListScreen extends StatelessWidget {
             title: title,
             content: content,
             imagePath: imagePath,
-            author: article.author, // Author remains the same
+            author: article.author,
           );
           context.read<ArticleCubit>().updateArticle(updatedArticle);
         },

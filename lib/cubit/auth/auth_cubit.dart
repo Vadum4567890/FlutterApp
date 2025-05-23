@@ -46,7 +46,7 @@ class AuthCubit extends Cubit<AuthState> {
         emit(AuthUnauthenticated()); // User needs to log in after registration
       } else {
         emit(const AuthError(
-            'Registration failed. Username or email might already exist.'));
+            'Registration failed. Username or email might already exist.',),);
       }
     } catch (e) {
       emit(AuthError(e.toString()));
@@ -60,7 +60,7 @@ class AuthCubit extends Cubit<AuthState> {
   }
 
   Future<void> changePassword(
-      String currentPassword, String newPassword) async {
+      String currentPassword, String newPassword,) async {
     if (state is AuthAuthenticated) {
       final currentUser = (state as AuthAuthenticated).user;
       emit(AuthLoading());
@@ -74,11 +74,11 @@ class AuthCubit extends Cubit<AuthState> {
           emit(PasswordChangeSuccess(currentUser));
         } else {
           emit(PasswordChangeFailure(currentUser,
-              'Failed to change password. Invalid current password or new password policy violation.'));
+              'Failed to change password. Invalid current password or new password policy violation.',),);
         }
       } catch (e) {
         emit(PasswordChangeFailure(
-            currentUser, 'Error changing password: ${e.toString()}'));
+            currentUser, 'Error changing password: ${e.toString()}',),);
       } finally {
         await Future.delayed(const Duration(seconds: 3));
         emit(AuthAuthenticated(currentUser));

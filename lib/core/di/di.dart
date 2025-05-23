@@ -16,6 +16,6 @@ Future<void> init() async {
   sl.registerLazySingleton<ArticleService>(ArticleService.new);
   sl.registerFactory(() => AuthCubit(authService: sl()));
   sl.registerFactory(
-      () => ArticleCubit(articleService: sl(), authService: sl()));
+      () => ArticleCubit(articleService: sl(), authService: sl()),);
   sl.registerFactory(() => ProfileCubit(authService: sl()));
 }

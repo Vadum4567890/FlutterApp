@@ -39,13 +39,12 @@ class ProfileScreen extends StatelessWidget {
                   return const CircularProgressIndicator();
                 } else if (state is ProfileLoaded) {
                   return Column(
-                    mainAxisAlignment: MainAxisAlignment.start,
                     children: [
                       const CircleAvatar(
                         radius: 50,
                         backgroundColor: Colors.white,
                         child: Icon(Icons.person,
-                            size: 50, color: Colors.blueAccent),
+                            size: 50, color: Colors.blueAccent,),
                       ),
                       const SizedBox(height: 20),
                       Text(

@@ -1,26 +1,17 @@
-// lib/models/article.dart
-import 'package:equatable/equatable.dart'; // Import equatable for proper object comparison
+import 'package:equatable/equatable.dart';
 
-/// Represents an article with its details.
 class Article extends Equatable {
-  final int? id; // ID is now nullable, as it might not exist for new articles
+  final int? id;
   final String title;
   final String content;
   final String? imagePath;
   final String author;
 
-  /// Main constructor for the Article class.
-  /// The `id` is optional, primarily used when creating new articles before DB insertion.
   const Article({
-    this.id, // Made nullable
-    required this.title,
-    required this.content,
+    required this.title, required this.content, required this.author, this.id,
     this.imagePath,
-    required this.author,
   });
 
-  /// Factory constructor for creating an [Article] object from a database map.
-  /// Assumes 'id' is always present and an integer when retrieved from the DB.
   factory Article.fromMap(Map<String, dynamic> map) {
     return Article(
       id: map['id']

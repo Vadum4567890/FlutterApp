@@ -1,4 +1,3 @@
-// lib/presentation/article/article_state.dart
 import 'package:equatable/equatable.dart';
 import 'package:my_project/models/article.dart';
 

@@ -1,10 +1,11 @@
-// lib/screens/add_article_screen.dart
+// ignore_for_file: use_build_context_synchronously
+
 import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:path/path.dart' as p; // Import path package
-import 'package:path_provider/path_provider.dart'; // Import path_provider
+import 'package:path/path.dart' as p;
+import 'package:path_provider/path_provider.dart'; 
 
 class AddArticleScreen extends StatefulWidget {
   final void Function(String, String, String?) onAdd;
@@ -19,7 +20,7 @@ class _AddArticleScreenState extends State<AddArticleScreen> {
   final _titleController = TextEditingController();
   final _contentController = TextEditingController();
 
-  String? _imagePath; // This will now store the persistent path
+  String? _imagePath;
 
   @override
   void dispose() {
@@ -29,36 +30,26 @@ class _AddArticleScreenState extends State<AddArticleScreen> {
   }
 
   Future<void> _pickImage() async {
-    final pickedFile =
-        await ImagePicker().pickImage(source: ImageSource.gallery);
+    final pickedFile = await ImagePicker().pickImage(source: ImageSource.gallery);
     if (pickedFile != null) {
-      // Get the application's documents directory
       final appDocumentsDir = await getApplicationDocumentsDirectory();
-      // Define a unique file name using current timestamp or a UUID
-      final fileName = p.basename(
-          pickedFile.path); // Use path.basename to get just the file name
-      final uniqueFileName =
-          '${DateTime.now().millisecondsSinceEpoch}_$fileName';
+      final fileName = p.basename(pickedFile.path,);
+      final uniqueFileName ='${DateTime.now().millisecondsSinceEpoch}_$fileName';
       final newFilePath = p.join(appDocumentsDir.path, uniqueFileName);
-
-      // Create a File object for the picked image
       final File originalImageFile = File(pickedFile.path);
 
       try {
-        // Copy the image file to the new persistent path
         final File savedImage = await originalImageFile.copy(newFilePath);
         setState(() {
           _imagePath =
-              savedImage.path; // Update _imagePath with the persistent path
+              savedImage.path;
         });
       } catch (e) {
-        // Handle error during file copy (e.g., permission issues)
-        print('Error copying image: $e');
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(content: Text('Failed to save image: ${e.toString()}')),
         );
         setState(() {
-          _imagePath = null; // Clear image path on error
+          _imagePath = null;
         });
       }
     }
@@ -74,7 +65,6 @@ class _AddArticleScreenState extends State<AddArticleScreen> {
       );
       return;
     }
-    // Now _imagePath contains the persistent path
     widget.onAdd(title, content, _imagePath);
 
     Navigator.pop(context);
@@ -109,7 +99,7 @@ class _AddArticleScreenState extends State<AddArticleScreen> {
                 TextField(
                   controller: _titleController,
                   style: const TextStyle(
-                      color: Colors.white), // Text color for input
+                      color: Colors.white,), // Text color for input
                   decoration: InputDecoration(
                     labelText: 'Title',
                     labelStyle: const TextStyle(color: Colors.white),
@@ -138,7 +128,7 @@ class _AddArticleScreenState extends State<AddArticleScreen> {
                 TextField(
                   controller: _contentController,
                   style: const TextStyle(
-                      color: Colors.white), // Text color for input
+                      color: Colors.white,), // Text color for input
                   decoration: InputDecoration(
                     labelText: 'Content',
                     labelStyle: const TextStyle(color: Colors.white),
@@ -178,7 +168,7 @@ class _AddArticleScreenState extends State<AddArticleScreen> {
                             borderRadius: BorderRadius.circular(12),
                             child: Image.file(
                               File(
-                                  _imagePath!), // Now using the persistent path
+                                  _imagePath!,),
                               fit: BoxFit.cover,
                             ),
                           )
@@ -187,7 +177,7 @@ class _AddArticleScreenState extends State<AddArticleScreen> {
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
                                 Icon(Icons.image,
-                                    size: 50, color: Colors.white),
+                                    size: 50, color: Colors.white,),
                                 const SizedBox(height: 8),
                                 Text(
                                   'Tap to add image',
@@ -213,7 +203,7 @@ class _AddArticleScreenState extends State<AddArticleScreen> {
                     child: const Text(
                       'Save Article',
                       style: TextStyle(
-                          color: Colors.white), // Ensure text color is visible
+                          color: Colors.white,),
                     ),
                   ),
                 ),

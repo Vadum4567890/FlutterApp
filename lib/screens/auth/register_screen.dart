@@ -3,24 +3,17 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:my_project/cubit/auth/auth_cubit.dart';
 import 'package:my_project/cubit/auth/auth_state.dart';
 
-/// A stateless widget for the user registration screen.
-/// It dispatches registration events to the AuthCubit and reacts to AuthState changes.
 class RegisterScreen extends StatelessWidget {
   const RegisterScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
-    // Controllers are managed locally within the build method for this stateless widget.
-    // For more complex forms, consider a dedicated StatefulWidget just for form fields
-    // or a form management package.
     final TextEditingController usernameController = TextEditingController();
     final TextEditingController emailController = TextEditingController();
     final TextEditingController passwordController = TextEditingController();
     final TextEditingController confirmPasswordController =
         TextEditingController();
 
-    // Helper functions for client-side validation.
-    // These are kept in the UI layer as they are directly related to input formatting.
     bool isValidEmail(String email) {
       final emailRegex =
           RegExp(r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$');
@@ -36,15 +29,13 @@ class RegisterScreen extends StatelessWidget {
       return password.length >= 6;
     }
 
-    // Function to handle the registration attempt.
-    // It performs client-side validation and then dispatches the event to the AuthCubit.
     void handleRegister() {
       final username = usernameController.text.trim();
       final email = emailController.text.trim();
       final password = passwordController.text;
       final confirmPassword = confirmPasswordController.text;
 
-      String? validationError; // Local validation error message
+      String? validationError;
 
       if (!isValidEmail(email)) {
         validationError = 'Invalid email address';
@@ -58,37 +49,30 @@ class RegisterScreen extends StatelessWidget {
       }
 
       if (validationError != null) {
-        // Show local validation error using a SnackBar
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(content: Text(validationError)),
         );
         return;
       }
-
-      // If client-side validation passes, dispatch the register event to the AuthCubit.
       context.read<AuthCubit>().register(username, password, email);
     }
 
     return Scaffold(
       body: BlocConsumer<AuthCubit, AuthState>(
         listener: (context, state) {
-          // Listen for state changes from AuthCubit
           if (state is AuthUnauthenticated) {
-            // After successful registration, navigate to login screen
             Navigator.pushNamed(context, '/login');
             ScaffoldMessenger.of(context).showSnackBar(
               const SnackBar(
-                  content: Text('Registration successful! Please log in.')),
+                  content: Text('Registration successful! Please log in.'),),
             );
           } else if (state is AuthError) {
-            // Show error message from the Cubit (e.g., username already exists)
             ScaffoldMessenger.of(context).showSnackBar(
               SnackBar(content: Text(state.message)),
             );
           }
         },
         builder: (context, state) {
-          // Build UI based on the current state from AuthCubit
           return DecoratedBox(
             decoration: const BoxDecoration(
               gradient: LinearGradient(
@@ -161,7 +145,6 @@ class RegisterScreen extends StatelessWidget {
                       ),
                       obscureText: true,
                     ),
-                    // Display error message from Cubit if present
                     if (state is AuthError)
                       Padding(
                         padding: const EdgeInsets.all(8.0),
@@ -172,7 +155,6 @@ class RegisterScreen extends StatelessWidget {
                       ),
                     const SizedBox(height: 20),
                     GestureDetector(
-                      // Disable button if authentication is in progress
                       onTap: state is AuthLoading ? null : handleRegister,
                       child: Container(
                         width: double.infinity,
@@ -192,7 +174,7 @@ class RegisterScreen extends StatelessWidget {
                           child: state is AuthLoading
                               ? const CircularProgressIndicator(
                                   color: Colors
-                                      .pinkAccent) // Show loading indicator
+                                      .pinkAccent,)
                               : const Text(
                                   'Register',
                                   style: TextStyle(

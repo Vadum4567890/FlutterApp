@@ -105,7 +105,7 @@ class LoginScreen extends StatelessWidget {
                         child: Center(
                           child: state is AuthLoading
                               ? const CircularProgressIndicator(
-                                  color: Colors.blueAccent)
+                                  color: Colors.blueAccent,)
                               : const Text(
                                   'Login',
                                   style: TextStyle(

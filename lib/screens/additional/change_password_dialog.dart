@@ -1,3 +1,5 @@
+// ignore_for_file: library_private_types_in_public_api
+
 import 'package:flutter/material.dart';
 
 class ChangePasswordDialog extends StatefulWidget {
@@ -43,7 +45,7 @@ class _ChangePasswordDialogState extends State<ChangePasswordDialog> {
     }
 
     widget.onPasswordChange(currentPassword, newPassword);
-    Navigator.of(context).pop(); // Dismiss dialog after triggering action
+    Navigator.of(context).pop();
   }
 
   @override

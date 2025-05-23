@@ -52,7 +52,7 @@ class AuthService {
   }
 
   Future<bool> changePassword(
-      String username, String currentPassword, String newPassword) async {
+      String username, String currentPassword, String newPassword,) async {
     final user = await _authStorage.getUser(username);
     if (user != null && user.password == currentPassword) {
       final updatedUser = User(
