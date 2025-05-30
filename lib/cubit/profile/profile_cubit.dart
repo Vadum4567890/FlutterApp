@@ -22,7 +22,9 @@ class ProfileCubit extends Cubit<ProfileState> {
   }
 
   Future<void> changePassword(
-      String currentPassword, String newPassword) async {
+    String currentPassword,
+    String newPassword,
+  ) async {
     emit(ProfileLoading());
     try {
       final user = await authService.getCurrentUserDetails();

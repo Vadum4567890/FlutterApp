@@ -1,3 +1,5 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'dart:io';
 
 import 'package:flutter/material.dart';
@@ -114,8 +116,10 @@ class AddArticleScreen extends StatelessWidget {
                                   width: double.infinity,
                                   height: 150,
                                   errorBuilder: (context, error, stackTrace) {
-                                    return const Icon(Icons.broken_image,
-                                        color: Colors.red);
+                                    return const Icon(
+                                      Icons.broken_image,
+                                      color: Colors.red,
+                                    );
                                   },
                                 ),
                               )
@@ -135,11 +139,14 @@ class AddArticleScreen extends StatelessWidget {
                     backgroundColor: Colors.orangeAccent,
                     padding: const EdgeInsets.symmetric(vertical: 14),
                     shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(10)),
+                      borderRadius: BorderRadius.circular(10),
+                    ),
                   ),
                   icon: const Icon(Icons.save),
-                  label: const Text('Save Article',
-                      style: TextStyle(fontSize: 16)),
+                  label: const Text(
+                    'Save Article',
+                    style: TextStyle(fontSize: 16),
+                  ),
                   onPressed: saveArticle,
                 ),
               ],

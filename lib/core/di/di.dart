@@ -21,7 +21,8 @@ Future<void> init() async {
 
   sl.registerFactory(() => AuthCubit(authService: sl()));
   sl.registerFactory(
-      () => ArticleCubit(articleService: sl(), authService: sl()));
+    () => ArticleCubit(articleService: sl(), authService: sl()),
+  );
   sl.registerFactory(() => ProfileCubit(authService: sl()));
   sl.registerFactory(() => QRCubit(usbManager: sl()));
 }
