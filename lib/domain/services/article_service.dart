@@ -9,8 +9,9 @@ class ArticleService implements ArticleServiceInterface {
   }
 
   @override
-  Future<void> addArticle(Article article) async {
-    await ArticleDatabase.insertArticle(article);
+  Future<Article> addArticle(Article article) async {
+    final id = await ArticleDatabase.insertArticle(article);
+    return article.copyWith(id: id);
   }
 
   @override

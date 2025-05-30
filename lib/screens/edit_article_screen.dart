@@ -1,6 +1,4 @@
-// edit_article_dialog.dart
 // ignore_for_file: library_private_types_in_public_api
-// This comment ignores the warning about using private types in public API.
 
 import 'dart:io';
 import 'package:flutter/material.dart';

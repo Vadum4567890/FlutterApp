@@ -1,1 +1,1 @@
-This is my first lab app - 
+![CodeRabbit Pull Request Reviews](https://img.shields.io/coderabbit/prs/github/Vadum4567890/FlutterApp?utm_source=oss&utm_medium=github&utm_campaign=Vadum4567890%2FFlutterApp&labelColor=171717&color=FF570A&link=https%3A%2F%2Fcoderabbit.ai&label=CodeRabbit+Reviews)

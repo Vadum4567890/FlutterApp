@@ -1,5 +1,3 @@
-// ignore_for_file: prefer_const_constructors, lines_longer_than_80_chars
-
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:my_project/models/article.dart';
