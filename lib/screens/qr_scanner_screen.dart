@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mobile_scanner/mobile_scanner.dart';
@@ -37,8 +36,10 @@ class QRScannerScreen extends StatelessWidget {
               if (state is QRSuccess)
                 Padding(
                   padding: const EdgeInsets.all(16.0),
-                  child: Text('Результат: ${state.data}',
-                      style: const TextStyle(fontSize: 18),),
+                  child: Text(
+                    'Результат: ${state.data}',
+                    style: const TextStyle(fontSize: 18),
+                  ),
                 ),
             ],
           );

@@ -1,4 +1,3 @@
-// lib/presentation/profile/profile_state.dart
 import 'package:equatable/equatable.dart';
 import 'package:my_project/models/user.dart';
 

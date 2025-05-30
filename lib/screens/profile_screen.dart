@@ -43,8 +43,11 @@ class ProfileScreen extends StatelessWidget {
                       const CircleAvatar(
                         radius: 50,
                         backgroundColor: Colors.white,
-                        child: Icon(Icons.person,
-                            size: 50, color: Colors.blueAccent,),
+                        child: Icon(
+                          Icons.person,
+                          size: 50,
+                          color: Colors.blueAccent,
+                        ),
                       ),
                       const SizedBox(height: 20),
                       Text(
@@ -123,7 +126,6 @@ class ProfileScreen extends StatelessWidget {
                         ),
                       ),
                       const SizedBox(height: 10),
-                      // New button to navigate to Saved QR Screen
                       GestureDetector(
                         onTap: () {
                           Navigator.pushNamed(context, '/saved_qr');
@@ -132,7 +134,7 @@ class ProfileScreen extends StatelessWidget {
                           width: double.infinity,
                           padding: const EdgeInsets.symmetric(vertical: 15),
                           decoration: BoxDecoration(
-                            color: Colors.white, // Consistent with other buttons
+                            color: Colors.white,
                             borderRadius: BorderRadius.circular(12),
                             boxShadow: [
                               BoxShadow(

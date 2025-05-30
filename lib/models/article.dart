@@ -8,14 +8,16 @@ class Article extends Equatable {
   final String author;
 
   const Article({
-    required this.title, required this.content, required this.author, this.id,
+    required this.title,
+    required this.content,
+    required this.author,
+    this.id,
     this.imagePath,
   });
 
   factory Article.fromMap(Map<String, dynamic> map) {
     return Article(
-      id: map['id']
-          as int, // Cast directly to int, assuming it's never null from DB
+      id: map['id'] as int,
       title: map['title'] as String,
       content: map['content'] as String,
       imagePath: map['imagePath'] as String?,
@@ -23,11 +25,9 @@ class Article extends Equatable {
     );
   }
 
-  /// Converts the [Article] object to a map suitable for database operations.
-  /// Includes the `id` for updates.
   Map<String, dynamic> toMap() {
     return {
-      'id': id, // Include id for updates
+      'id': id,
       'title': title,
       'content': content,
       'imagePath': imagePath,
@@ -35,8 +35,6 @@ class Article extends Equatable {
     };
   }
 
-  /// Converts the [Article] object to a map suitable for database insertion.
-  /// Excludes the `id` field, as the database will generate it automatically.
   Map<String, dynamic> toMapWithoutId() {
     return {
       'title': title,
@@ -46,7 +44,6 @@ class Article extends Equatable {
     };
   }
 
-  /// Creates a copy of the [Article] object with optional new values.
   Article copyWith({
     int? id,
     String? title,
@@ -63,7 +60,6 @@ class Article extends Equatable {
     );
   }
 
-  /// Overrides `props` from `Equatable` to enable value comparison for Article objects.
   @override
   List<Object?> get props => [id, title, content, imagePath, author];
 }

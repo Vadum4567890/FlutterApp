@@ -1,5 +1,3 @@
-// ignore_for_file: inference_failure_on_instance_creation
-
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -100,13 +98,17 @@ class ArticleListScreen extends StatelessWidget {
                                         fit: BoxFit.cover,
                                         errorBuilder:
                                             (context, error, stackTrace) {
-                                          return const Icon(Icons.broken_image,
-                                              color: Colors.red,);
+                                          return const Icon(
+                                            Icons.broken_image,
+                                            color: Colors.red,
+                                          );
                                         },
                                       ),
                                     )
-                                  : const Icon(Icons.image_not_supported,
-                                      color: Colors.white,),
+                                  : const Icon(
+                                      Icons.image_not_supported,
+                                      color: Colors.white,
+                                    ),
                             ),
                             title: Text(
                               article.title,
@@ -115,25 +117,32 @@ class ArticleListScreen extends StatelessWidget {
                             subtitle: Text(
                               'by ${article.author}',
                               style: TextStyle(
-                                  color: Colors.white.withOpacity(0.7),),
+                                color: Colors.white.withOpacity(0.7),
+                              ),
                             ),
                             trailing: canModify
                                 ? Row(
                                     mainAxisSize: MainAxisSize.min,
                                     children: [
                                       IconButton(
-                                        icon: const Icon(Icons.edit,
-                                            color: Colors.white,),
+                                        icon: const Icon(
+                                          Icons.edit,
+                                          color: Colors.white,
+                                        ),
                                         onPressed: () {
                                           _showEditDialog(context, article);
                                         },
                                       ),
                                       IconButton(
-                                        icon: const Icon(Icons.delete,
-                                            color: Colors.white,),
+                                        icon: const Icon(
+                                          Icons.delete,
+                                          color: Colors.white,
+                                        ),
                                         onPressed: () {
                                           _showDeleteDialog(
-                                              context, article.id!,);
+                                            context,
+                                            article.id!,
+                                          );
                                         },
                                       ),
                                     ],
@@ -174,13 +183,7 @@ class ArticleListScreen extends StatelessWidget {
           Navigator.push(
             context,
             MaterialPageRoute(
-              builder: (context) => AddArticleScreen(
-                onAdd: (title, content, imagePath) {
-                  context
-                      .read<ArticleCubit>()
-                      .addArticle(title, content, imagePath);
-                },
-              ),
+              builder: (context) => const AddArticleScreen(),
             ),
           );
         },

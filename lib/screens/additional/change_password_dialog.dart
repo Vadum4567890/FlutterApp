@@ -1,9 +1,8 @@
-// ignore_for_file: library_private_types_in_public_api
-
 import 'package:flutter/material.dart';
 
 class ChangePasswordDialog extends StatefulWidget {
-  final void Function(String currentPassword, String newPassword) onPasswordChange;
+  final void Function(String currentPassword, String newPassword)
+      onPasswordChange;
 
   const ChangePasswordDialog({required this.onPasswordChange, super.key});
 
@@ -12,9 +11,11 @@ class ChangePasswordDialog extends StatefulWidget {
 }
 
 class _ChangePasswordDialogState extends State<ChangePasswordDialog> {
-  final TextEditingController _currentPasswordController = TextEditingController();
+  final TextEditingController _currentPasswordController =
+      TextEditingController();
   final TextEditingController _newPasswordController = TextEditingController();
-  final TextEditingController _confirmNewPasswordController = TextEditingController();
+  final TextEditingController _confirmNewPasswordController =
+      TextEditingController();
   String _errorMessage = '';
 
   @override
@@ -70,7 +71,8 @@ class _ChangePasswordDialogState extends State<ChangePasswordDialog> {
             const SizedBox(height: 10),
             TextField(
               controller: _confirmNewPasswordController,
-              decoration: const InputDecoration(labelText: 'Confirm New Password'),
+              decoration:
+                  const InputDecoration(labelText: 'Confirm New Password'),
               obscureText: true,
             ),
             if (_errorMessage.isNotEmpty)

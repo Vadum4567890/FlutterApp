@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:my_project/cubit/qr/qr_cubit.dart';
@@ -17,11 +16,15 @@ class SavedQrScreen extends StatelessWidget {
             if (state is QRLoading) {
               return const CircularProgressIndicator();
             } else if (state is QRSuccess) {
-              return Text(state.data,
-                  style: const TextStyle(fontSize: 18),);
+              return Text(
+                state.data,
+                style: const TextStyle(fontSize: 18),
+              );
             } else if (state is QRFailure) {
-              return Text('Помилка: ${state.error}',
-                  style: const TextStyle(color: Colors.red),);
+              return Text(
+                'Помилка: ${state.error}',
+                style: const TextStyle(color: Colors.red),
+              );
             } else {
               return ElevatedButton(
                 onPressed: () {

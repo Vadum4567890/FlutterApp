@@ -13,15 +13,15 @@ import 'package:my_project/domain/services/usb_service.dart';
 final sl = GetIt.instance;
 
 Future<void> init() async {
-  // Services/Data Sources (Singletons)
   sl.registerLazySingleton<IAuthStorage>(SharedPrefsAuthStorage.new);
   sl.registerLazySingleton<AuthService>(() => AuthService(sl()));
   sl.registerLazySingleton<ArticleService>(ArticleService.new);
-  sl.registerLazySingleton<BaseUsbService>(UsbService.new); 
-  sl.registerLazySingleton<UsbManager>(() => UsbManager(sl<BaseUsbService>())); 
-  // Cubits (Factories)
+  sl.registerLazySingleton<BaseUsbService>(UsbService.new);
+  sl.registerLazySingleton<UsbManager>(() => UsbManager(sl<BaseUsbService>()));
+
   sl.registerFactory(() => AuthCubit(authService: sl()));
-  sl.registerFactory(() => ArticleCubit(articleService: sl(), authService: sl()));
+  sl.registerFactory(
+      () => ArticleCubit(articleService: sl(), authService: sl()));
   sl.registerFactory(() => ProfileCubit(authService: sl()));
   sl.registerFactory(() => QRCubit(usbManager: sl()));
 }
