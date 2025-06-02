@@ -3,9 +3,10 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:path/path.dart' as p;
-import 'package:path_provider/path_provider.dart'; 
+import 'package:path_provider/path_provider.dart';
 
 class AddArticleScreen extends StatefulWidget {
   final void Function(String, String, String?) onAdd;
@@ -22,6 +23,17 @@ class _AddArticleScreenState extends State<AddArticleScreen> {
 
   String? _imagePath;
 
+  static const LinearGradient _backgroundGradient = LinearGradient(
+    colors: [
+      Color(0xFF283593),
+      Color(0xFF673AB7),
+      Color(0xFF880E4F),
+    ],
+    begin: Alignment.topLeft,
+    end: Alignment.bottomRight,
+    stops: [0.1, 0.5, 0.9],
+  );
+
   @override
   void dispose() {
     _titleController.dispose();
@@ -33,16 +45,15 @@ class _AddArticleScreenState extends State<AddArticleScreen> {
     final pickedFile = await ImagePicker().pickImage(source: ImageSource.gallery);
     if (pickedFile != null) {
       final appDocumentsDir = await getApplicationDocumentsDirectory();
-      final fileName = p.basename(pickedFile.path,);
-      final uniqueFileName ='${DateTime.now().millisecondsSinceEpoch}_$fileName';
+      final fileName = p.basename(pickedFile.path);
+      final uniqueFileName = '${DateTime.now().millisecondsSinceEpoch}_$fileName';
       final newFilePath = p.join(appDocumentsDir.path, uniqueFileName);
       final File originalImageFile = File(pickedFile.path);
 
       try {
         final File savedImage = await originalImageFile.copy(newFilePath);
         setState(() {
-          _imagePath =
-              savedImage.path;
+          _imagePath = savedImage.path;
         });
       } catch (e) {
         ScaffoldMessenger.of(context).showSnackBar(
@@ -75,21 +86,24 @@ class _AddArticleScreenState extends State<AddArticleScreen> {
     return Scaffold(
       extendBodyBehindAppBar: true,
       appBar: AppBar(
-        title: const Text('Add Article'),
+        title: Text(
+          'Add Article',
+          style: GoogleFonts.poppins(
+            color: Colors.white,
+            fontSize: 24,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
         backgroundColor: Colors.transparent,
         elevation: 0,
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back),
+          icon: const Icon(Icons.arrow_back, color: Colors.white),
           onPressed: () => Navigator.pop(context),
         ),
       ),
       body: DecoratedBox(
         decoration: const BoxDecoration(
-          gradient: LinearGradient(
-            colors: [Colors.blueAccent, Colors.purpleAccent],
-            begin: Alignment.topLeft,
-            end: Alignment.bottomRight,
-          ),
+          gradient: _backgroundGradient,
         ),
         child: SafeArea(
           child: Padding(
@@ -98,57 +112,51 @@ class _AddArticleScreenState extends State<AddArticleScreen> {
               children: [
                 TextField(
                   controller: _titleController,
-                  style: const TextStyle(
-                      color: Colors.white,), // Text color for input
+                  style: GoogleFonts.poppins(color: Colors.white),
                   decoration: InputDecoration(
                     labelText: 'Title',
-                    labelStyle: const TextStyle(color: Colors.white),
+                    labelStyle: GoogleFonts.poppins(color: Colors.white70),
                     hintText: 'Enter the title',
-                    hintStyle: const TextStyle(color: Colors.white70),
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(12),
-                      borderSide: BorderSide.none, // Remove default border
-                    ),
-                    enabledBorder: OutlineInputBorder(
-                      // Border when enabled
-                      borderRadius: BorderRadius.circular(12),
-                      borderSide:
-                          BorderSide(color: Colors.white.withOpacity(0.5)),
-                    ),
-                    focusedBorder: OutlineInputBorder(
-                      // Border when focused
-                      borderRadius: BorderRadius.circular(12),
-                      borderSide: const BorderSide(color: Colors.white),
-                    ),
-                    filled: true,
-                    fillColor: Colors.white.withOpacity(0.2),
-                  ),
-                ),
-                const SizedBox(height: 16),
-                TextField(
-                  controller: _contentController,
-                  style: const TextStyle(
-                      color: Colors.white,), // Text color for input
-                  decoration: InputDecoration(
-                    labelText: 'Content',
-                    labelStyle: const TextStyle(color: Colors.white),
-                    hintText: 'Enter the content',
-                    hintStyle: const TextStyle(color: Colors.white70),
+                    hintStyle: GoogleFonts.poppins(color: Colors.white70),
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(12),
                       borderSide: BorderSide.none,
                     ),
                     enabledBorder: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(12),
-                      borderSide:
-                          BorderSide(color: Colors.white.withOpacity(0.5)),
+                      borderSide: BorderSide(color: Colors.white.withOpacity(0.5)),
                     ),
                     focusedBorder: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(12),
                       borderSide: const BorderSide(color: Colors.white),
                     ),
                     filled: true,
-                    fillColor: Colors.white.withOpacity(0.2),
+                    fillColor: Colors.white.withOpacity(0.1),
+                  ),
+                ),
+                const SizedBox(height: 16),
+                TextField(
+                  controller: _contentController,
+                  style: GoogleFonts.poppins(color: Colors.white),
+                  decoration: InputDecoration(
+                    labelText: 'Content',
+                    labelStyle: GoogleFonts.poppins(color: Colors.white70),
+                    hintText: 'Enter the content',
+                    hintStyle: GoogleFonts.poppins(color: Colors.white70),
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(12),
+                      borderSide: BorderSide.none,
+                    ),
+                    enabledBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(12),
+                      borderSide: BorderSide(color: Colors.white.withOpacity(0.5)),
+                    ),
+                    focusedBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(12),
+                      borderSide: const BorderSide(color: Colors.white),
+                    ),
+                    filled: true,
+                    fillColor: Colors.white.withOpacity(0.1),
                   ),
                   maxLines: 5,
                 ),
@@ -160,15 +168,21 @@ class _AddArticleScreenState extends State<AddArticleScreen> {
                     width: double.infinity,
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(12),
-                      color: Colors.white.withOpacity(0.2),
+                      color: Colors.white.withOpacity(0.1),
                       border: Border.all(color: Colors.white.withOpacity(0.5)),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.black.withOpacity(0.3),
+                          blurRadius: 8,
+                          offset: const Offset(0, 4),
+                        ),
+                      ],
                     ),
                     child: _imagePath != null
                         ? ClipRRect(
                             borderRadius: BorderRadius.circular(12),
                             child: Image.file(
-                              File(
-                                  _imagePath!,),
+                              File(_imagePath!),
                               fit: BoxFit.cover,
                             ),
                           )
@@ -176,12 +190,11 @@ class _AddArticleScreenState extends State<AddArticleScreen> {
                             child: Column(
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
-                                Icon(Icons.image,
-                                    size: 50, color: Colors.white,),
+                                Icon(Icons.image, size: 50, color: Colors.white),
                                 const SizedBox(height: 8),
                                 Text(
                                   'Tap to add image',
-                                  style: TextStyle(color: Colors.white),
+                                  style: GoogleFonts.poppins(color: Colors.white),
                                 ),
                               ],
                             ),
@@ -194,16 +207,21 @@ class _AddArticleScreenState extends State<AddArticleScreen> {
                   child: ElevatedButton(
                     onPressed: _saveArticle,
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.orangeAccent,
+                      backgroundColor: Colors.white,
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(12),
                       ),
                       padding: const EdgeInsets.symmetric(vertical: 16),
+                      elevation: 5,
+                      shadowColor: Colors.black45,
                     ),
-                    child: const Text(
+                    child: Text(
                       'Save Article',
-                      style: TextStyle(
-                          color: Colors.white,),
+                      style: GoogleFonts.poppins(
+                        color: _backgroundGradient.colors.first,
+                        fontWeight: FontWeight.bold,
+                        fontSize: 18,
+                      ),
                     ),
                   ),
                 ),

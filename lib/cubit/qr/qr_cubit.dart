@@ -50,15 +50,18 @@ class QRCubit extends Cubit<QRState> {
         },
       );
 
-      final result = await completer.future.timeout(
-        const Duration(seconds: 5),
-        onTimeout: () {
-          subscription?.cancel();
-          return 'Arduino не відповів (тайм-аут)';
-        },
-      );
-
-      emit(QRSuccess(result));
+      try {
+        final result = await completer.future.timeout(
+          const Duration(seconds: 5),
+          onTimeout: () {
+            subscription?.cancel();
+            throw TimeoutException('Arduino не відповів (тайм-аут)');
+          },
+        );
+        emit(QRSuccess(result));
+      } on TimeoutException catch (e) {
+        emit(QRFailure(e.message ?? 'Arduino не відповів (тайм-аут)'));
+      }
     } catch (e) {
       emit(QRFailure(e.toString()));
     }
