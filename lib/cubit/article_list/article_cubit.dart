@@ -1,4 +1,3 @@
-// lib/presentation/article/article_cubit.dart
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:my_project/cubit/article_list/article_state.dart';
 import 'package:my_project/domain/services/article_service.dart';

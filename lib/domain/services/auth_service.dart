@@ -45,7 +45,6 @@ class AuthService {
     return null;
   }
 
-  // Метод для отримання email користувача
   Future<String?> getEmail(String username) async {
     final user = await _authStorage.getUser(username);
     return user?.email;
