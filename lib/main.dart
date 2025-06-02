@@ -49,7 +49,7 @@ class ArticleApp extends StatelessWidget {
         ),
         routes: {
           '/login': (context) => const LoginScreen(),
-          '/register': (context) => const RegisterScreen(),
+          '/register': (context) => RegisterScreen(),
           '/profile': (context) => const ProfileScreen(),
           '/home': (context) => const ArticleListScreen(),
           '/qr_scanner': (context) => const QRScannerScreen(),

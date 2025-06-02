@@ -1,27 +1,38 @@
 import 'package:equatable/equatable.dart';
 import 'package:my_project/models/user.dart';
 
-abstract class ProfileState extends Equatable {
-  const ProfileState();
+class ProfileState extends Equatable {
+  final User? user;
+  final String? passwordError;
+  final bool isLoading;
+
+  const ProfileState({
+    this.user,
+    this.passwordError,
+    this.isLoading = false,
+  });
 
   @override
-  List<Object?> get props => [];
+  List<Object?> get props => [user, passwordError, isLoading];
 }
 
-class ProfileInitial extends ProfileState {}
+class ProfileInitial extends ProfileState {
+  const ProfileInitial() : super(isLoading: false);
+}
 
-class ProfileLoading extends ProfileState {}
+class ProfileLoading extends ProfileState {
+  const ProfileLoading() : super(isLoading: true);
+}
 
 class ProfileLoaded extends ProfileState {
-  final User user;
-  const ProfileLoaded(this.user);
-  @override
-  List<Object?> get props => [user];
+  const ProfileLoaded(User user, {super.passwordError})
+      : super(user: user, isLoading: false);
 }
 
 class ProfileError extends ProfileState {
   final String message;
-  const ProfileError(this.message);
+  const ProfileError(this.message) : super(isLoading: false);
+
   @override
-  List<Object?> get props => [message];
+  List<Object?> get props => [message, ...super.props];
 }

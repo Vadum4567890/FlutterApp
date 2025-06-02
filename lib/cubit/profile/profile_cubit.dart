@@ -14,7 +14,7 @@ class ProfileCubit extends Cubit<ProfileState> {
       if (user != null) {
         emit(ProfileLoaded(user));
       } else {
-        emit(const ProfileError('User not logged in or profile not found.'));
+        emit(ProfileError('User not logged in or profile not found.'));
       }
     } catch (e) {
       emit(ProfileError('Failed to load profile: ${e.toString()}'));
@@ -29,7 +29,7 @@ class ProfileCubit extends Cubit<ProfileState> {
     try {
       final user = await authService.getCurrentUserDetails();
       if (user == null) {
-        emit(const ProfileError('User not logged in.'));
+        emit(ProfileError('User not logged in.'));
         return;
       }
 
@@ -43,10 +43,52 @@ class ProfileCubit extends Cubit<ProfileState> {
         final updatedUser = await authService.getCurrentUserDetails();
         emit(ProfileLoaded(updatedUser!));
       } else {
-        emit(const ProfileError('Failed to change password.'));
+        emit(ProfileError('Failed to change password.'));
       }
     } catch (e) {
       emit(ProfileError('Error changing password: ${e.toString()}'));
     }
+  }
+
+  Future<void> validateAndChangePassword(
+    String currentPassword,
+    String newPassword,
+    String confirmNewPassword,
+  ) async {
+    if (state.user != null) {
+      emit(ProfileLoaded(state.user!));
+    }
+
+    if (newPassword.length < 6) {
+      emit(
+        ProfileLoaded(
+          state.user!,
+          passwordError: 'New password must be at least 6 characters.',
+        ),
+      );
+      return;
+    }
+
+    if (newPassword != confirmNewPassword) {
+      emit(
+        ProfileLoaded(
+          state.user!,
+          passwordError: 'New passwords do not match.',
+        ),
+      );
+      return;
+    }
+
+    if (currentPassword.isEmpty) {
+      emit(
+        ProfileLoaded(
+          state.user!,
+          passwordError: 'Current password is required.',
+        ),
+      );
+      return;
+    }
+
+    await changePassword(currentPassword, newPassword);
   }
 }
