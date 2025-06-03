@@ -1,13 +1,11 @@
-// ignore_for_file: inference_failure_on_instance_creation
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:my_project/cubit/article_list/article_cubit.dart';
 import 'package:my_project/cubit/article_list/article_state.dart';
 import 'package:my_project/models/article.dart';
-import 'package:my_project/screens/add_article_screen.dart';
-import 'package:my_project/screens/article_detail_screen.dart';
-import 'package:my_project/screens/edit_article_screen.dart';
+import 'package:my_project/screens/article/add_article_screen.dart';
+import 'package:my_project/screens/article/article_detail_screen.dart';
+import 'package:my_project/screens/article/edit_article_screen.dart';
 import 'package:my_project/widgets/article_card.dart';
 import 'package:my_project/widgets/gradient_background.dart';
 import 'package:my_project/widgets/transparent_app_bar.dart';
@@ -46,9 +44,9 @@ class ArticleListScreen extends StatelessWidget {
       ),
       floatingActionButton: FloatingActionButton(
         backgroundColor: Colors.orangeAccent,
-        onPressed: () => Navigator.push(
+        onPressed: () => Navigator.push<void>(
           context,
-          MaterialPageRoute(builder: (context) => const AddArticleScreen()),
+          MaterialPageRoute<void>(builder: (context) => const AddArticleScreen()),
         ),
         child: const Icon(Icons.add, color: Colors.white),
       ),
@@ -100,9 +98,9 @@ class ArticleListScreen extends StatelessWidget {
                 canModify: snapshot.data ?? false,
                 onEdit: () => _showEditDialog(context, article),
                 onDelete: () => _showDeleteDialog(context, article.id!),
-                onTap: () => Navigator.push(
+                onTap: () => Navigator.push<void>(
                   context,
-                  MaterialPageRoute(
+                  MaterialPageRoute<void>(
                     builder: (context) => ArticleDetailScreen(article: article),
                   ),
                 ),

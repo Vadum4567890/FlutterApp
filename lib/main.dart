@@ -6,12 +6,12 @@ import 'package:my_project/cubit/auth/auth_cubit.dart';
 import 'package:my_project/cubit/auth/auth_state.dart';
 import 'package:my_project/cubit/profile/profile_cubit.dart';
 import 'package:my_project/cubit/qr/qr_cubit.dart';
-import 'package:my_project/screens/article_list_screen.dart';
+import 'package:my_project/screens/article/article_list_screen.dart';
 import 'package:my_project/screens/auth/login_screen.dart';
 import 'package:my_project/screens/auth/register_screen.dart';
-import 'package:my_project/screens/profile_screen.dart';
-import 'package:my_project/screens/qr_scanner_screen.dart';
-import 'package:my_project/screens/saved_qr_screen.dart';
+import 'package:my_project/screens/profile/profile_screen.dart';
+import 'package:my_project/screens/qr/qr_scanner_screen.dart';
+import 'package:my_project/screens/qr/saved_qr_screen.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
